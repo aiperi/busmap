@@ -19,22 +19,24 @@ import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import {busStops, releases, reports, rides, routes, tracking} from "../../../paths";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 
 const AppToolBar = () => {
     const navigate = useNavigate();
-
+    let location = useLocation();
+    let pathname = location.pathname
     const pages = [
-        {name:'Остановки', route: busStops},
+        {name: 'Остановки', route: busStops},
         {name: 'Маршруты', route: routes},
-        {name:'Выпуски', route: releases},
-        {name:'Рейсы', route: rides},
-        {name:'Слежение', route: tracking},
-        {name:'Отчеты', route: reports}
+        {name: 'Выпуски', route: releases},
+        {name: 'Рейсы', route: rides},
+        {name: 'Слежение', route: tracking},
+        {name: 'Отчеты', route: reports}
     ];
 
     const dropLinks = ['Обзор', 'Настройки пользователя', 'Ключи API', 'Документация', 'Что нового', 'Выход'];
-    const icons = [<PreviewIcon/>,<SettingsIcon/>,<KeyIcon/>,<TextSnippetIcon/>,<TipsAndUpdatesIcon/>,<ExitToAppIcon/>]
+    const icons = [<PreviewIcon/>, <SettingsIcon/>, <KeyIcon/>, <TextSnippetIcon/>, <TipsAndUpdatesIcon/>,
+        <ExitToAppIcon/>]
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -55,7 +57,7 @@ const AppToolBar = () => {
 
     return (
         <AppBar position="static"
-                style={{backgroundColor:"#15416c"}}
+                style={{backgroundColor: "#15416c"}}
         >
             <Container maxWidth="xxl">
                 <Toolbar disableGutters>
@@ -66,7 +68,7 @@ const AppToolBar = () => {
                         href="/"
                         sx={{
                             mr: 2,
-                            display: { xs: 'none', md: 'flex' },
+                            display: {xs: 'none', md: 'flex'},
                             fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
@@ -74,11 +76,11 @@ const AppToolBar = () => {
                             textDecoration: 'none',
                         }}
                     >
-                        <img style={{width: "130px", height:"auto"}}
-                            src={logo} alt="aptosh-logo"/>
+                        <img style={{width: "130px", height: "auto"}}
+                             src={logo} alt="aptosh-logo"/>
                     </Typography>
 
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none', } }}>
+                    <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none',}}}>
                         <IconButton
                             size="large"
                             aria-label="account of current user"
@@ -87,7 +89,7 @@ const AppToolBar = () => {
                             onClick={handleOpenNavMenu}
                             color="inherit"
                         >
-                            <MenuIcon />
+                            <MenuIcon/>
                         </IconButton>
                         <Menu
                             id="menu-appbar"
@@ -104,16 +106,17 @@ const AppToolBar = () => {
                             open={Boolean(anchorElNav)}
                             onClose={handleCloseNavMenu}
                             sx={{
-                                display: { xs: 'block', md: 'none' },
+                                display: {xs: 'block', md: 'none'},
                             }}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                                <MenuItem key={page.name} onClick={handleCloseNavMenu}
+                                          sx={{'.Mui-selected': {color: 'red'}}}>
                                     <Typography
                                         textAlign="center"
                                         component={Link}
                                         to={page.route}
-                                        sx={{textDecoration:'none', color: 'black'}}
+                                        sx={{textDecoration: 'none', color: 'black'}}
                                     >
                                         {page.name}
                                     </Typography>
@@ -128,7 +131,7 @@ const AppToolBar = () => {
                         href=""
                         sx={{
                             mr: 2,
-                            display: { xs: 'flex', md: 'none' },
+                            display: {xs: 'flex', md: 'none'},
                             flexGrow: 1,
                             fontFamily: 'monospace',
                             fontWeight: 700,
@@ -137,29 +140,39 @@ const AppToolBar = () => {
                             textDecoration: 'none',
                         }}
                     >
-                        <img style={{width: "140px", height:"auto"}}
-                            src={logo} alt="aptosh-logo"/>
+                        <img style={{width: "140px", height: "auto"}}
+                             src={logo} alt="aptosh-logo"/>
                     </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } ,justifyContent:"right", marginRight:"10px"}}>
+                    <Box sx={{
+                        flexGrow: 1,
+                        display: {xs: 'none', md: 'flex'},
+                        justifyContent: "right",
+                        marginRight: "10px"
+                    }}>
                         {pages.map(page => (
                             <Button
                                 key={page.name}
-                                onClick={()=>navigate(page.route)}
-                                sx={{ my: 2, color: 'white', display: 'block', }}
+                                onClick={() => navigate(page.route)}
+                                sx={{
+                                    my: 2,
+                                    display: 'block',
+                                    color: 'white',
+                                    borderBottom: page.route === pathname ? '2px solid white' : 'none'
+                                }}
                             >
                                 {page.name}
                             </Button>
                         ))}
                     </Box>
 
-                    <Box sx={{ flexGrow: 0 }}>
+                    <Box sx={{flexGrow: 0}}>
                         <Tooltip title="Открыть профиль">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                            <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
                             </IconButton>
                         </Tooltip>
                         <Menu
-                            sx={{ mt: '45px' }}
+                            sx={{mt: '45px'}}
                             id="menu-appbar"
                             anchorEl={anchorElUser}
                             anchorOrigin={{
@@ -174,20 +187,20 @@ const AppToolBar = () => {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {dropLinks.map((links,index) => (
+                            {dropLinks.map((links, index) => (
                                 <MenuItem key={links} onClick={handleCloseUserMenu}>
 
                                     <Typography
                                         textAlign="center"
                                         style={{
-                                            color:"#166767",
+                                            color: "#166767",
                                             display: "flex",
-                                            alignItems:'center'
-                                    }
-                                    }
+                                            alignItems: 'center'
+                                        }
+                                        }
                                     >
-                                       <span style={{paddingRight:'5px', fontSize:'9px'}}>{icons[index]}</span>
-                                       <p style={{fontSize:"15px", lineHeight:"15px"}}> {links}</p>
+                                        <span style={{paddingRight: '5px', fontSize: '9px'}}>{icons[index]}</span>
+                                        <p style={{fontSize: "15px", lineHeight: "15px"}}> {links}</p>
                                     </Typography>
                                 </MenuItem>
                             ))}
