@@ -1,37 +1,51 @@
 import React from 'react';
 import {Grid} from "@mui/material";
-import {GoogleMap, LoadScript, Marker} from '@react-google-maps/api';
+import {GoogleMap, Marker, useLoadScript} from '@react-google-maps/api';
+import mapStyles from '../../mapStyles.json'
 
 import {makeStyles} from "@mui/styles";
 import AutocompleteSearch from "../AutocompleteSearch/AutocompleteSearch";
+import Preloader from "../UI/Preloader/Preloader";
+import {green} from "../../colors";
+import DirectionsBusFilledIcon from "@mui/icons-material/DirectionsBusFilled";
+import busMarker from '../../assets/images/busMarker.png'
 
 const useStyles = makeStyles(theme => ({
-    container:{
-        width:"100%",
-        height:"80vh",
+    container: {
+        width: "100%",
+        height: "80vh",
     },
 
-    streetsBox:{
-        padding:"15px",
+    streetsBox: {
+        padding: "15px",
     }
 
 }));
 
+const container = {
+    width: "100%",
+    height: "80vh",
+}
+
 const BusStopsMap = () => {
-    const classes=useStyles();
+    const classes = useStyles();
 
-    const container ={
-            width:"100%",
-            height:"80vh",
+    const defaultMapOptions = {
+        styles: mapStyles
+    };
+
+    const {isLoaded} = useLoadScript({
+        googleMapsApiKey: "AIzaSyD8VJHZ2vIQNxAZZ1hf0vKnEa3KjmXM1Pg",
+    });
+
+    const center = {
+        lat: 42.880961762656284,
+        lng: 74.58320606499385
     }
-
-     const center ={
-         lat: 42.880961762656284,
-         lng: 74.58320606499385
-        }
 
 
     return (
+
         <Grid container>
             <Grid item width={"30%"} className={classes.streetsBox}>
                 <AutocompleteSearch
@@ -39,33 +53,33 @@ const BusStopsMap = () => {
             </Grid>
             <Grid item flexGrow={1}>
 
-                    <div className={classes.container}>
+                <div className={classes.container}>
 
+                    {!isLoaded ? (
+                        <Preloader/>
+                    ) : (
 
-                        <LoadScript
-                            googleMapsApiKey="AIzaSyD8VJHZ2vIQNxAZZ1hf0vKnEa3KjmXM1Pg"
+                        <GoogleMap
+                            mapContainerStyle={container}
+                            center={center}
+                            zoom={10}
+                            options={{
+                                mapTypeId: 'satellite'
+                            }}
                         >
-                            <GoogleMap
-                                mapContainerStyle={container}
-                                center={center}
-                                zoom={16}
-                            >
-                                { /* Child components, such as markers, info windows, etc. */ }
-                                <Marker position={center} />}
-                                <></>
-                            </GoogleMap>
-                        </LoadScript>
+                            { /* Child components, such as markers, info windows, etc. */}
+                            <Marker position={center} options={{
+                                icon: busMarker
+                            }}/>}
+                            <></>
+                        </GoogleMap>
+                    )}
 
-
-                        {/*<GoogleMapReact*/}
-                        {/*    bootstrapURLKeys={{ key: "AIzaSyD8VJHZ2vIQNxAZZ1hf0vKnEa3KjmXM1Pg" }}*/}
-                        {/*    defaultCenter={defaultProps.center}*/}
-                        {/*    defaultZoom={defaultProps.zoom}*/}
-                        {/*></GoogleMapReact>*/}
-                    </div>
+                </div>
 
             </Grid>
         </Grid>
+
     );
 };
 

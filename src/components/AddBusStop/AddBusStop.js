@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {Button, Checkbox, Grid, TextField, Tooltip} from "@mui/material";
-import CommuteIcon from "@mui/icons-material/Commute";
 import {blue, green, pink, yellow} from "../../colors";
 import DirectionsBusFilledIcon from "@mui/icons-material/DirectionsBusFilled";
 import DirectionsTransitIcon from "@mui/icons-material/DirectionsTransit";
@@ -57,7 +56,7 @@ const AddBusStop = () => {
 
     return (
         <Grid container >
-            <Grid item container justifyContent={"space-between"} sx={{padding: "15px"}}>
+            <Grid item container justifyContent={"space-between"} sx={{padding: "25px 15px"}}>
                 <TextField
                     name="name"
                     variant={"outlined"}
@@ -95,7 +94,8 @@ const AddBusStop = () => {
                     inputProps={{style: {height: "2px"}}}
                 />
 
-                <Grid container item width={"25%"} justifyContent={"space-evenly"}>
+                <Grid container item width={"25%"} justifyContent={"space-evenly"}alignItems={"center"}>
+                    <label style={{color:"grey", caretColor:"transparent"}}>Тип</label>
                     <Tooltip title="Автобусы" arrow>
                         <Checkbox
                             name="bus"
@@ -151,7 +151,7 @@ const AddBusStop = () => {
 
 
             </Grid>
-            <Grid item container justifyContent={"space-between"} sx={{backgroundColor:"#15416c", padding:'15px'}}>
+            <Grid item container justifyContent={"space-between"} sx={{backgroundColor:"#15416c", padding:' 10px 15px'}}>
                 <div>
                     <ColorButton variant={"contained"}>Полигон</ColorButton>
                     <ColorButton variant={"contained"}>Круг</ColorButton>
