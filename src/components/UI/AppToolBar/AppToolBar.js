@@ -24,7 +24,7 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 const AppToolBar = () => {
     const navigate = useNavigate();
     let location = useLocation();
-    let pathname = location.pathname
+    let pathname = location.pathname;
     const pages = [
         {name: 'Остановки', route: busStops},
         {name: 'Маршруты', route: routes},

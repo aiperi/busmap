@@ -15,6 +15,7 @@ import SingleRoute from "./containers/SIngleRoute/SingleRoute";
 import SingleRide from "./containers/SingleRide/SingleRide";
 import Preloader from "./components/UI/Preloader/Preloader";
 import DirectionAnimation from "./containers/DIrectionAnimation/DirectionAnimation";
+import AddBusStop from "./components/AddBusStop/AddBusStop";
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path={singleRide} element={<SingleRide/>}/>
           <Route path="/loader" element={<Preloader/>}/>
           <Route path="/testAnimation" element={<DirectionAnimation/>}/>
+          <Route path="/addstop" element={<AddBusStop/>}/>
       </Routes>
       </Layout>
   );

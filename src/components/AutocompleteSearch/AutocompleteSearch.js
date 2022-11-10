@@ -65,6 +65,22 @@ const AutocompleteSearch = () => {
         {name:"Абдрахманова",location:" 74.0050 65.000565"},
     ]
 
+    //
+    // const busStops = [
+    //     {name:'Ахунбаева', location:" 74.0050 65.000565"},
+    //     {name:'Исанова',location:" 74.0050 65.000565"},
+    //     {name:'Горький',location:" 74.0050 65.000565"},
+    //     {name:"Ауэзова",location:" 74.0050 65.000565"},
+    //     {name:"Турусбекова",location:" 74.0050 65.000565"},
+    //     {name:"Ленина",location:" 74.0050 65.000565"},
+    //     {name:"Пушкина",location:" 74.0050 65.000565"},
+    //     {name:"Манаса",location:" 74.0050 65.000565"},
+    //     {name:"Советская",location:" 74.0050 65.000565"},
+    //     {name:"Абдрахманова",location:" 74.0050 65.000565"},
+    // ]
+
+
+
     return (
         <Autocomplete
             id="combo-box-demo"
