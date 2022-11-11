@@ -1,14 +1,12 @@
-import React from 'react';
+import React, {useMemo, useState} from 'react';
 import {Grid} from "@mui/material";
-import {GoogleMap, Marker, useLoadScript} from '@react-google-maps/api';
-import mapStyles from '../../mapStyles.json'
+import {GoogleMap, InfoWindow, Marker, MarkerClusterer, useLoadScript} from '@react-google-maps/api';
 
 import {makeStyles} from "@mui/styles";
 import AutocompleteSearch from "../AutocompleteSearch/AutocompleteSearch";
 import Preloader from "../UI/Preloader/Preloader";
-import {green} from "../../colors";
-import DirectionsBusFilledIcon from "@mui/icons-material/DirectionsBusFilled";
 import busMarker from '../../assets/images/busMarker.png'
+import circle from '../../assets/images/circle.png'
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -27,25 +25,42 @@ const container = {
     height: "80vh",
 }
 
+
+const styles = [{
+    url: circle,
+    height: 55,
+    width: 55,
+    fontFamily: "Lato",
+    textColor: "black",
+    fontSize: "18px"
+}];
+
 const BusStopsMap = () => {
     const classes = useStyles();
+    const [selectedMarker, setSelectedMarker] = useState("");
 
-    const defaultMapOptions = {
-        styles: mapStyles
-    };
+    const center = useMemo(()=>({
+        lat: 42.880961762656284,
+            lng: 74.58320606499385}),[])
+
 
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyD8VJHZ2vIQNxAZZ1hf0vKnEa3KjmXM1Pg",
     });
 
-    const center = {
-        lat: 42.880961762656284,
-        lng: 74.58320606499385
-    }
 
-
+    const stops = [
+        {name: "Ахунбаева", position: {lat: 42.868013915470584, lng: 74.58773433630382}},
+        {name: "Гоин", position: {lat: 42.870010202180455, lng: 74.58947455638771}},
+        {name: "Манаса", position: {lat: 42.87053982221323, lng: 74.5923336977037}},
+        {name: "Ибраимова", position: {lat: 42.8698720396854, lng: 74.59817765687703}},
+        {name: "Горький", position: {lat: 42.857355713128506, lng: 74.5939360679194}},
+        {name: "Панфилова", position: {lat: 42.856502500731054, lng: 74.62419783486033}},
+        {name: "Лермонтова", position: {lat: 42.882319310729976, lng: 74.56372146958823}},
+        {name: "Салиева", position: {lat: 42.8430683010853, lng: 74.5933472030784}},
+        {name: "Гоголя", position: {lat: 42.830067952421345, lng: 74.60702612922111}},
+    ]
     return (
-
         <Grid container>
             <Grid item width={"30%"} className={classes.streetsBox}>
                 <AutocompleteSearch
@@ -68,10 +83,30 @@ const BusStopsMap = () => {
                             }}
                         >
                             { /* Child components, such as markers, info windows, etc. */}
-                            <Marker position={center} options={{
-                                icon: busMarker
-                            }}/>}
-                            <></>
+                            <MarkerClusterer styles={styles}>
+                                {(clusterer) =>
+                                    stops.map(stop => (
+                                        <Marker
+                                            position={stop.position}
+                                            options={{icon: busMarker}}
+                                            key={stop.position.lat}
+                                            clusterer={clusterer}
+                                            onMouseDown={() => {
+                                                setSelectedMarker(stop)
+                                            }}
+                                            onMouseOver={()=>{
+                                                setSelectedMarker("")
+                                            }}
+                                        />
+                                    ))}
+                            </MarkerClusterer>
+
+                            {selectedMarker && (
+                                <InfoWindow position={selectedMarker.position}>
+                                    <h4>{selectedMarker.name}</h4>
+                                </InfoWindow>
+                            )}
+
                         </GoogleMap>
                     )}
 
