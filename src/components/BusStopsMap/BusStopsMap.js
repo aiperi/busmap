@@ -7,8 +7,9 @@ import AutocompleteSearch from "../AutocompleteSearch/AutocompleteSearch";
 import Preloader from "../UI/Preloader/Preloader";
 import busMarker from '../../assets/images/busMarker.png'
 import circle from '../../assets/images/circle.png'
+import AddBusStop from "../AddBusStop/AddBusStop";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(()=> ({
     container: {
         width: "100%",
         height: "80vh",
@@ -38,16 +39,24 @@ const styles = [{
 const BusStopsMap = () => {
     const classes = useStyles();
     const [selectedMarker, setSelectedMarker] = useState("");
+    const [isAddStop, setIsAddStop] = useState(false);
+    const [newMarker, setNewMarker] = useState(null)
 
-    const center = useMemo(()=>({
+    const center = useMemo(() => ({
         lat: 42.880961762656284,
-            lng: 74.58320606499385}),[])
+        lng: 74.58320606499385
+    }), [])
 
 
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyD8VJHZ2vIQNxAZZ1hf0vKnEa3KjmXM1Pg",
     });
 
+
+    const onCancel = () => {
+        setIsAddStop(false);
+        setNewMarker(null);
+    }
 
     const stops = [
         {name: "Ахунбаева", position: {lat: 42.868013915470584, lng: 74.58773433630382}},
@@ -62,52 +71,77 @@ const BusStopsMap = () => {
     ]
     return (
         <Grid container>
-            <Grid item width={"30%"} className={classes.streetsBox}>
+            <Grid item width={"25%"} className={classes.streetsBox}>
                 <AutocompleteSearch
                 />
             </Grid>
-            <Grid item flexGrow={1}>
+            <Grid item width={"75%"}>
 
                 <div className={classes.container}>
 
                     {!isLoaded ? (
                         <Preloader/>
                     ) : (
+                        <div style={{position: "relative"}}>
+                            <GoogleMap
+                                mapContainerStyle={container}
+                                center={center}
+                                zoom={10}
+                                options={{
+                                    mapTypeId: 'satellite'
+                                }}
 
-                        <GoogleMap
-                            mapContainerStyle={container}
-                            center={center}
-                            zoom={10}
-                            options={{
-                                mapTypeId: 'satellite'
-                            }}
-                        >
-                            { /* Child components, such as markers, info windows, etc. */}
-                            <MarkerClusterer styles={styles}>
-                                {(clusterer) =>
-                                    stops.map(stop => (
+                                onRightClick={(ev) => {
+                                    const position = {
+                                        lat: ev.latLng.lat(),
+                                        lng: ev.latLng.lng(),
+                                    }
+                                    setNewMarker(position)
+                                    setIsAddStop(true)
+                                }}
+                            >
+                                { /* Child components, such as markers, info windows, etc. */}
+                                <MarkerClusterer styles={styles}>
+                                    {(clusterer) =>
+                                        stops.map(stop => (
+                                            <Marker
+                                                position={stop.position}
+                                                options={{icon: busMarker}}
+                                                key={stop.position.lat}
+                                                clusterer={clusterer}
+                                                onMouseDown={() => {
+                                                    setSelectedMarker(stop)
+                                                }}
+                                                onMouseOver={() => {
+                                                    setSelectedMarker("")
+                                                }}
+                                            />
+                                        ))}
+                                </MarkerClusterer>
+
+                                {newMarker && (
                                         <Marker
-                                            position={stop.position}
-                                            options={{icon: busMarker}}
-                                            key={stop.position.lat}
-                                            clusterer={clusterer}
-                                            onMouseDown={() => {
-                                                setSelectedMarker(stop)
-                                            }}
-                                            onMouseOver={()=>{
-                                                setSelectedMarker("")
-                                            }}
-                                        />
-                                    ))}
-                            </MarkerClusterer>
+                                        position={newMarker}
+                                        options={{icon: busMarker}}
+                                        style={[{position:"relative"}]}
+                                    />
+                                )}
 
-                            {selectedMarker && (
-                                <InfoWindow position={selectedMarker.position}>
-                                    <h4>{selectedMarker.name}</h4>
-                                </InfoWindow>
-                            )}
+                                {selectedMarker && (
+                                    <InfoWindow position={selectedMarker.position}>
+                                        <h4>{selectedMarker.name}</h4>
+                                    </InfoWindow>
+                                )}
+                                {isAddStop && (
+                                    <div style={{position: "absolute", zIndex: 555, bottom: 0}}>
+                                        <AddBusStop onCancel={onCancel}/>
+                                    </div>
 
-                        </GoogleMap>
+                                )}
+
+                            </GoogleMap>
+                        </div>
+
                     )}
 
                 </div>

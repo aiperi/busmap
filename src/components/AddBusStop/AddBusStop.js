@@ -13,7 +13,7 @@ const style = {
 }
 
 
-const ColorButton = styled(Button)(({ theme }) => ({
+const ColorButton = styled(Button)(( ) => ({
     color: 'white',
 textTransform:"capitalize",
     margin:"5px",
@@ -24,7 +24,7 @@ textTransform:"capitalize",
     },
 }));
 
-const AddBusStop = () => {
+const AddBusStop = ({onCancel}) => {
 
     const [stop, setStop] = useState({
         name: "",
@@ -56,7 +56,7 @@ const AddBusStop = () => {
 
     return (
         <Grid container >
-            <Grid item container justifyContent={"space-between"} sx={{padding: "25px 15px"}}>
+            <Grid item container justifyContent={"space-between"} sx={{padding: "25px 15px", backgroundColor:"white", border:"1px solid grey"}}>
                 <TextField
                     name="name"
                     variant={"outlined"}
@@ -94,7 +94,7 @@ const AddBusStop = () => {
                     inputProps={{style: {height: "2px"}}}
                 />
 
-                <Grid container item width={"25%"} justifyContent={"space-evenly"}alignItems={"center"}>
+                <Grid container item width={"25%"} justifyContent={"space-evenly"} alignItems={"center"}>
                     <label style={{color:"grey", caretColor:"transparent"}}>Тип</label>
                     <Tooltip title="Автобусы" arrow>
                         <Checkbox
@@ -157,7 +157,7 @@ const AddBusStop = () => {
                     <ColorButton variant={"contained"}>Круг</ColorButton>
                 </div>
                 <div>
-                    <ColorButton variant={"contained"}>Отменить</ColorButton>
+                    <ColorButton variant={"contained"} onClick={onCancel}>Отменить</ColorButton>
                     <ColorButton variant={"contained"}>Сохранить</ColorButton>
                 </div>
             </Grid>
