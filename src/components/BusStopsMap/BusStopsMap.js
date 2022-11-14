@@ -1,6 +1,6 @@
 import React, {useMemo, useState} from 'react';
 import {Grid} from "@mui/material";
-import {GoogleMap, InfoWindow, Marker, MarkerClusterer, useLoadScript} from '@react-google-maps/api';
+import {Circle, GoogleMap, InfoWindow, Marker, MarkerClusterer, useLoadScript} from '@react-google-maps/api';
 
 import {makeStyles} from "@mui/styles";
 import AutocompleteSearch from "../AutocompleteSearch/AutocompleteSearch";
@@ -9,7 +9,7 @@ import busMarker from '../../assets/images/busMarker.png'
 import circle from '../../assets/images/circle.png'
 import AddBusStop from "../AddBusStop/AddBusStop";
 
-const useStyles = makeStyles(()=> ({
+const useStyles = makeStyles(() => ({
     container: {
         width: "100%",
         height: "80vh",
@@ -26,7 +26,6 @@ const container = {
     height: "80vh",
 }
 
-
 const styles = [{
     url: circle,
     height: 55,
@@ -36,26 +35,53 @@ const styles = [{
     fontSize: "18px"
 }];
 
+
+const options = {
+    strokeColor: '#115604',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#4bd56b',
+    fillOpacity: 0.35,
+    clickable: false,
+    draggable: false,
+    editable: true,
+    visible: true,
+    zIndex: 1
+}
+
+
 const BusStopsMap = () => {
     const classes = useStyles();
     const [selectedMarker, setSelectedMarker] = useState("");
     const [isAddStop, setIsAddStop] = useState(false);
-    const [newMarker, setNewMarker] = useState(null)
+    const [newMarker, setNewMarker] = useState(null);
+    const [radius, setRadius] = useState(50);
+    const [circle, setCircle] = useState(null)
 
     const center = useMemo(() => ({
         lat: 42.880961762656284,
-        lng: 74.58320606499385
+        lng: 74.58320606499385,
     }), [])
 
+    const [zoom, setZoom] = useState(10)
 
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyD8VJHZ2vIQNxAZZ1hf0vKnEa3KjmXM1Pg",
     });
 
 
+    const handleCircleRadius = () => {
+        circle && setRadius(parseInt(circle['radius']))
+    };
+
+
     const onCancel = () => {
         setIsAddStop(false);
         setNewMarker(null);
+    }
+
+    const radiusChangeHandler = (e) => {
+        setRadius(parseInt(e.target.value))
     }
 
     const stops = [
@@ -86,7 +112,7 @@ const BusStopsMap = () => {
                             <GoogleMap
                                 mapContainerStyle={container}
                                 center={center}
-                                zoom={10}
+                                zoom={zoom}
                                 options={{
                                     mapTypeId: 'satellite'
                                 }}
@@ -97,8 +123,11 @@ const BusStopsMap = () => {
                                         lng: ev.latLng.lng(),
                                     }
                                     setNewMarker(position)
-                                    setIsAddStop(true)
+                                    setZoom(16)
+                                    setIsAddStop(true);
                                 }}
+
+
                             >
                                 { /* Child components, such as markers, info windows, etc. */}
                                 <MarkerClusterer styles={styles}>
@@ -120,12 +149,19 @@ const BusStopsMap = () => {
                                 </MarkerClusterer>
 
                                 {newMarker && (
-                                        <Marker
-                                        position={newMarker}
-                                        options={{icon: busMarker}}
-                                        style={[{position:"relative"}]}
+                                    <Circle
+                                        center={newMarker}
+                                        radius={radius}
+                                        options={options}
+                                        onRadiusChanged={handleCircleRadius}
+                                        onLoad={(circle) => setCircle(circle)}
+                                        onUnmount={(circle) => {
+                                            setCircle(null);
+                                            setRadius(50)
+                                        }}
                                     />
                                 )}
+
 
                                 {selectedMarker && (
                                     <InfoWindow position={selectedMarker.position}>
@@ -133,8 +169,12 @@ const BusStopsMap = () => {
                                     </InfoWindow>
                                 )}
                                 {isAddStop && (
-                                    <div style={{position: "absolute", zIndex: 555, bottom: 0}}>
-                                        <AddBusStop onCancel={onCancel}/>
+                                    <div style={{position: "absolute", zIndex: 555, bottom: 0, width: "100%"}}>
+                                        <AddBusStop
+                                            onCancel={onCancel}
+                                            changeRadius={radiusChangeHandler}
+                                            radius={radius}
+                                        />
                                     </div>
 
                                 )}

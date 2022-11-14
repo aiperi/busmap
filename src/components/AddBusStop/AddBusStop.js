@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Checkbox, Grid, TextField, Tooltip} from "@mui/material";
+import {Button, Checkbox, Grid, TextField, Tooltip, Typography} from "@mui/material";
 import {blue, green, pink, yellow} from "../../colors";
 import DirectionsBusFilledIcon from "@mui/icons-material/DirectionsBusFilled";
 import DirectionsTransitIcon from "@mui/icons-material/DirectionsTransit";
@@ -13,18 +13,18 @@ const style = {
 }
 
 
-const ColorButton = styled(Button)(( ) => ({
+const ColorButton = styled(Button)(() => ({
     color: 'white',
-textTransform:"capitalize",
-    margin:"5px",
-    backgroundColor:"#295b8d",
+    textTransform: "capitalize",
+    margin: "5px",
+    backgroundColor: "#295b8d",
     boxShadow: "none",
     '&:hover': {
         backgroundColor: "#19538c",
     },
 }));
 
-const AddBusStop = ({onCancel}) => {
+const AddBusStop = ({onCancel, radius, changeRadius}) => {
 
     const [stop, setStop] = useState({
         name: "",
@@ -55,8 +55,9 @@ const AddBusStop = ({onCancel}) => {
 
 
     return (
-        <Grid container >
-            <Grid item container justifyContent={"space-between"} sx={{padding: "25px 15px", backgroundColor:"white", border:"1px solid grey"}}>
+        <Grid container>
+            <Grid item container justifyContent={"space-between"}
+                  sx={{padding: "25px 15px", backgroundColor: "white", border: "1px solid grey"}}>
                 <TextField
                     name="name"
                     variant={"outlined"}
@@ -95,7 +96,7 @@ const AddBusStop = ({onCancel}) => {
                 />
 
                 <Grid container item width={"25%"} justifyContent={"space-evenly"} alignItems={"center"}>
-                    <label style={{color:"grey", caretColor:"transparent"}}>Тип</label>
+                    <label style={{color: "grey", caretColor: "transparent"}}>Тип</label>
                     <Tooltip title="Автобусы" arrow>
                         <Checkbox
                             name="bus"
@@ -151,10 +152,30 @@ const AddBusStop = ({onCancel}) => {
 
 
             </Grid>
-            <Grid item container justifyContent={"space-between"} sx={{backgroundColor:"#15416c", padding:' 10px 15px'}}>
-                <div>
-                    <ColorButton variant={"contained"}>Полигон</ColorButton>
-                    <ColorButton variant={"contained"}>Круг</ColorButton>
+            <Grid item container justifyContent={"space-between"}
+                  sx={{backgroundColor: "#15416c", padding: ' 10px 15px'}}>
+                <div style={{display:"flex", alignItems:"center", color:'white'}}>
+                    {/*<ColorButton variant={"contained"} >Полигон</ColorButton>*/}
+                    <Typography variant={"subtitle1"}>Радиус</Typography>
+                    <TextField type={"number"}
+                               value={radius}
+                               onChange={changeRadius}
+                               inputProps={{style:{color:"white"}}}
+                               sx={{
+                                   border:"1px solid white",
+                                   margin:"0 10px",
+                                   width:"80px",
+                                   fontSize:"12px",
+                                   "& .MuiOutlinedInput-root": {
+                                       "& > fieldset": {
+                                           border: "none"
+                                       }
+                                   }
+                               }}
+
+                    />
+                    <Typography variant={"subtitle1"}>м</Typography>
+
                 </div>
                 <div>
                     <ColorButton variant={"contained"} onClick={onCancel}>Отменить</ColorButton>
