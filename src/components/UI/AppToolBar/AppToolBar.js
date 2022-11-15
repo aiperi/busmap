@@ -13,12 +13,9 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import logo from "../../../assets/images/APTOSH_logo.png";
 import PreviewIcon from '@mui/icons-material/Preview';
-import SettingsIcon from '@mui/icons-material/Settings';
 import KeyIcon from '@mui/icons-material/Key';
-import TextSnippetIcon from '@mui/icons-material/TextSnippet';
-import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import {busStops, releases, reports, rides, routes, tracking} from "../../../paths";
+import {apiKey, busStops, dashboard, login, reports, rides, routes, tracking} from "../../../paths";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 
 const AppToolBar = () => {
@@ -28,15 +25,21 @@ const AppToolBar = () => {
     const pages = [
         {name: 'Остановки', route: busStops},
         {name: 'Маршруты', route: routes},
-        {name: 'Выпуски', route: releases},
         {name: 'Рейсы', route: rides},
         {name: 'Слежение', route: tracking},
         {name: 'Отчеты', route: reports}
     ];
+//Временно закоментировала
+    // const dropLinks = ['Обзор', 'Настройки пользователя', 'Ключи API', 'Документация', 'Что нового', 'Выход'];
+    // const icons = [<PreviewIcon/>, <SettingsIcon/>, <KeyIcon/>, <TextSnippetIcon/>, <TipsAndUpdatesIcon/>,
+    //     <ExitToAppIcon/>]
 
-    const dropLinks = ['Обзор', 'Настройки пользователя', 'Ключи API', 'Документация', 'Что нового', 'Выход'];
-    const icons = [<PreviewIcon/>, <SettingsIcon/>, <KeyIcon/>, <TextSnippetIcon/>, <TipsAndUpdatesIcon/>,
-        <ExitToAppIcon/>]
+
+    const dropLinks = [
+        {name:'Обзор', route: dashboard, icon:<PreviewIcon/> },
+        {name: 'Ключи API', route: apiKey, icon:<KeyIcon/>},
+        {name:'Выход', route: login, icon:<ExitToAppIcon/>}];
+
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -187,21 +190,24 @@ const AppToolBar = () => {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {dropLinks.map((links, index) => (
-                                <MenuItem key={links} onClick={handleCloseUserMenu}>
+                            {dropLinks.map((link) => (
+                                <MenuItem key={link.name} onClick={handleCloseUserMenu}>
 
-                                    <Typography
+                                    <Button
                                         textAlign="center"
-                                        style={{
+                                        sx={{
                                             color: "#166767",
                                             display: "flex",
-                                            alignItems: 'center'
+                                            alignItems: 'center',
+                                            textTransform:"capitalize"
                                         }
                                         }
+                                        onClick={()=>navigate(link.route)}
+
                                     >
-                                        <span style={{paddingRight: '5px', fontSize: '9px'}}>{icons[index]}</span>
-                                        <p style={{fontSize: "15px", lineHeight: "15px"}}> {links}</p>
-                                    </Typography>
+                                        <span style={{paddingRight: '5px', fontSize: '9px'}}>{link.icon}</span>
+                                        <p style={{fontSize: "15px", lineHeight: "15px"}}> {link.name}</p>
+                                    </Button>
                                 </MenuItem>
                             ))}
                         </Menu>

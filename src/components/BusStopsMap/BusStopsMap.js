@@ -125,6 +125,10 @@ const BusStopsMap = () => {
                                     setNewMarker(position)
                                     setZoom(16)
                                     setIsAddStop(true);
+
+                                    return ()=>{
+                                        setZoom(10)
+                                    }
                                 }}
 
 
@@ -174,6 +178,7 @@ const BusStopsMap = () => {
                                             onCancel={onCancel}
                                             changeRadius={radiusChangeHandler}
                                             radius={radius}
+                                            position={newMarker}
                                         />
                                     </div>
 

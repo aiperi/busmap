@@ -8,13 +8,12 @@ const Layout = ({children}) => {
     const location = useLocation();
     return (
         <>
-            {/*<CssBaseline/>*/}
+            <CssBaseline/>
             {location.pathname !== login &&(
                 <AppToolBar/>
             )}
-            <div style={{display: 'flex', minHeight: '100vh', flexDirection: 'column'}}>
+            <div style={{display: 'flex', flexDirection: 'column'}}>
                 <div style={{flex: '1 1 auto'}}>
-
                     {children}
                 </div>
             </div>

@@ -6,12 +6,12 @@ import DirectionsTransitIcon from "@mui/icons-material/DirectionsTransit";
 import TramIcon from "@mui/icons-material/Tram";
 import LocalTaxiIcon from "@mui/icons-material/LocalTaxi";
 import {styled} from "@mui/material/styles";
+import {useDispatch} from "react-redux";
 
 
 const style = {
     fontSize: "22px",
 }
-
 
 const ColorButton = styled(Button)(() => ({
     color: 'white',
@@ -24,17 +24,19 @@ const ColorButton = styled(Button)(() => ({
     },
 }));
 
-const AddBusStop = ({onCancel, radius, changeRadius}) => {
+const AddBusStop = ({onCancel, radius, changeRadius, position}) => {
 
-    const [stop, setStop] = useState({
-        name: "",
-        description: "",
-        bus: false,
-        trolleybus: false,
-        tram: false,
-        taxi: false,
-
-    });
+    const [stop, setStop] = useState(
+        {
+            name: "",
+            description: "",
+            bus: false,
+            trolleybus: false,
+            tram: false,
+            taxi: false,
+            radius: 50,
+            position: ""
+        });
 
 
     const handleChange = (e) => {
@@ -54,6 +56,17 @@ const AddBusStop = ({onCancel, radius, changeRadius}) => {
     }
 
 
+    const submitNewStop = () => {
+
+        setStop(prev => ({
+            ...prev,
+            radius: radius,
+            position: position
+        }));
+
+    }
+
+    console.log(stop)
     return (
         <Grid container>
             <Grid item container justifyContent={"space-between"}
@@ -154,18 +167,17 @@ const AddBusStop = ({onCancel, radius, changeRadius}) => {
             </Grid>
             <Grid item container justifyContent={"space-between"}
                   sx={{backgroundColor: "#15416c", padding: ' 10px 15px'}}>
-                <div style={{display:"flex", alignItems:"center", color:'white'}}>
-                    {/*<ColorButton variant={"contained"} >Полигон</ColorButton>*/}
+                <div style={{display: "flex", alignItems: "center", color: 'white'}}>
                     <Typography variant={"subtitle1"}>Радиус</Typography>
                     <TextField type={"number"}
                                value={radius}
                                onChange={changeRadius}
-                               inputProps={{style:{color:"white"}}}
+                               inputProps={{style: {color: "white"}}}
                                sx={{
-                                   border:"1px solid white",
-                                   margin:"0 10px",
-                                   width:"80px",
-                                   fontSize:"12px",
+                                   border: "1px solid white",
+                                   margin: "0 10px",
+                                   width: "80px",
+                                   fontSize: "12px",
                                    "& .MuiOutlinedInput-root": {
                                        "& > fieldset": {
                                            border: "none"
@@ -179,7 +191,7 @@ const AddBusStop = ({onCancel, radius, changeRadius}) => {
                 </div>
                 <div>
                     <ColorButton variant={"contained"} onClick={onCancel}>Отменить</ColorButton>
-                    <ColorButton variant={"contained"}>Сохранить</ColorButton>
+                    <ColorButton variant={"contained"} onClick={submitNewStop}>Сохранить</ColorButton>
                 </div>
             </Grid>
         </Grid>

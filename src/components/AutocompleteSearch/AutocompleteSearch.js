@@ -49,10 +49,10 @@ const AutocompleteSearch = () => {
         {name: "Ауэзова", location: " 74.0050 65.000565", id: 4},
         {name: "Турусбекова", location: " 74.0050 65.000565", id: 5},
         {name: "Ленина", location: " 74.0050 65.000565", id: 6},
-        // {name: "Пушкина", location: " 74.0050 65.000565"},
-        // {name: "Манаса", location: " 74.0050 65.000565"},
-        // {name: "Советская", location: " 74.0050 65.000565"},
-        // {name: "Абдрахманова", location: " 74.0050 65.000565"},
+        {name: "Пушкина", location: " 74.0050 65.000565"},
+        {name: "Манаса", location: " 74.0050 65.000565"},
+        {name: "Советская", location: " 74.0050 65.000565"},
+        {name: "Абдрахманова", location: " 74.0050 65.000565"},
     ]
 
     return (
@@ -64,7 +64,7 @@ const AutocompleteSearch = () => {
                 height: "100%",
                 width: "100%",
             }}
-            ListboxProps={{style: {maxHeight: '60vh'}}}
+            ListboxProps={{style: {maxHeight: '70vh'}}}
             getOptionLabel={(option) => `${option.name} ${option.location}`}
             renderOption={(props, option) => {
                 return (
@@ -74,7 +74,6 @@ const AutocompleteSearch = () => {
                                  setCurrentId(event.target.id)
                                  setShowBtn(true);
                              })}
-                             id={option.id}
                         >
                             <div>
                                 {option.name}
@@ -85,7 +84,7 @@ const AutocompleteSearch = () => {
                                         fontSize: "12px",
                                     }}/>
                             </div>
-                                <div style={{position: "absolute", top: "0", right: "0"}} key={option.id}>
+                                <div style={{position: "absolute", top: "0", right: "0"}}>
                                     <IconButton aria-label="edit">
                                         <ModeEditIcon sx={style}/>
                                     </IconButton>

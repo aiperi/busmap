@@ -1,2 +1,2 @@
-export const apiURL = 'https://jashtar.info/elbook/api';
-// export const urlMedia = 'https://jashtar.info';
+export const apiURL = 'https://busmap.prosoft.kg/';
+

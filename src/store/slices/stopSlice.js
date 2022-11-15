@@ -6,6 +6,7 @@ const initialState = {
     stops: [],
     fetchLoading: false,
     pageCount: 1,
+    addLoading: false,
 }
 
 const stopSlice = createSlice({
@@ -18,10 +19,19 @@ const stopSlice = createSlice({
             fetchStopsSuccess(state, action) {
                 state.stops = action.payload;
                 state.fetchLoading = false;
-            }
-            ,
+            },
             fetchStopsFailure(state) {
                 state.fetchLoading = false;
+            },
+            addStopRequest(state) {
+                state.addLoading = true;
+            },
+            addStopSuccess(state, action) {
+                state.addLoading = false;
+            }
+            ,
+            addStopFailure(state) {
+                state.addLoading = false;
             }
 
         }
