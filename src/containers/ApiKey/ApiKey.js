@@ -1,30 +1,44 @@
 import React, {useState} from 'react';
-import {Button, Grid, TextField, Tooltip} from "@mui/material";
+import {Button, Grid, IconButton, TextField, Tooltip} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import AddIcon from '@mui/icons-material/Add';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import {green} from "../../colors";
 import {styled} from "@mui/material/styles";
+import {useDispatch} from "react-redux";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 const ColorButton = styled(Button)(() => ({
     color: 'white',
     textTransform: "capitalize",
     margin: "5px",
-    backgroundColor: "#295b8d",
+    backgroundColor: "#19538CFF",
     boxShadow: "none",
     '&:hover': {
-        backgroundColor: "#19538c",
+        backgroundColor: "#2267ab",
+    },
+}));
+
+const ColorButton2 = styled(Button)(() => ({
+    color: 'white',
+    textTransform: "capitalize",
+    margin: "5px",
+    backgroundColor: "#608a34",
+    boxShadow: "none",
+    '&:hover': {
+        backgroundColor: "#619d1d",
     },
 }));
 
 
 const ApiKey = () => {
-
+    const dispatch = useDispatch();
     const [show, setShow] = useState(false);
     const [key, setKey] = useState("");
 
-    const onBtnClick = ()=>{
+    const onBtnClick = () => {
         setShow(true);
     }
 
@@ -33,7 +47,15 @@ const ApiKey = () => {
         setKey(value);
     }
 
+    const onCancel = () => {
+        setKey("");
+        setShow(false)
+    }
 
+
+    const onSave = () => {
+
+    }
 
     return (
         <Grid sx={{backgroundColor: "whitesmoke"}}>
@@ -61,8 +83,34 @@ const ApiKey = () => {
                 alignItems="center"
                 sx={{padding: "2px 10px", backgroundColor: "white", marginTop: "5px"}}
             >
+
+                <div style={{
+                    backgroundColor: "whitesmoke",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    border: "1px solid lightgrey",
+                    padding: "10px"
+                }}>
+                    <div>
+                        <Typography variant={"subtitle1"}>Новый ключ</Typography>
+                    </div>
+                    <div>
+                        <IconButton
+                            sx={{border: "1px solid lightgrey", borderRadius: "0", marginRight: "10px"}}
+                        >
+                            <ContentCopyIcon sx={{fontSize: "18px"}}/>
+                        </IconButton>
+                        <IconButton
+                            sx={{border: "1px solid lightgrey", borderRadius: "0"}}
+                        >
+                            <DeleteIcon sx={{fontSize: "18px"}}/>
+                        </IconButton>
+                    </div>
+                </div>
+
                 {show && (
-                    <div style={{width:"1200px", margin:"0 auto"}}>
+                    <div style={{width: "1000px", margin: "20px auto 10px"}}>
                         <Grid item container justifyContent={"space-between"}
                               sx={{padding: "25px 15px", backgroundColor: "white", border: "1px solid lightgrey"}}>
                             <TextField
@@ -88,8 +136,8 @@ const ApiKey = () => {
                         <Grid item container justifyContent={"space-between"}
                               sx={{backgroundColor: "#15416c", padding: ' 10px 15px'}}>
                             <div>
-                                <ColorButton variant={"contained"}>Отменить</ColorButton>
-                                <ColorButton variant={"contained"}>Сохранить</ColorButton>
+                                <ColorButton variant={"contained"} onClick={onCancel}>Отменить</ColorButton>
+                                <ColorButton2 variant={"contained"}>Сохранить</ColorButton2>
                             </div>
                         </Grid>
                     </div>

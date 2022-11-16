@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import Login from "./containers/Login/Login";
 import {Route, Routes} from "react-router-dom";
-import {apiKey, busStops, login, reports, rides, routes, singleRide, singleRoute, tracking} from "./paths";
+import {apiKey, busStops, dashboard, login, reports, rides, routes, singleRide, singleRoute, tracking} from "./paths";
 import BusStops from "./containers/BusStops/BusStops";
 import TransportRoutes from "./containers/TransportRoutes/TransportRoutes";
 import Layout from "./components/UI/Layout/Layout";
@@ -26,6 +26,7 @@ function App() {
           <Route path={login} element={<Login/>}/>
           <Route path={routes} element={<TransportRoutes/>}/>
           <Route  index element={<Dashboard/>}/>
+          <Route  path={dashboard} element={<Dashboard/>}/>
           <Route path={tracking} element={<Tracking/>}/>
           <Route path={reports} element={<Reports/>}/>
           <Route path={apiKey} element={<ApiKey/>}/>

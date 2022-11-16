@@ -5,7 +5,6 @@ const name = 'stops';
 const initialState = {
     stops: [],
     fetchLoading: false,
-    pageCount: 1,
     addLoading: false,
 }
 

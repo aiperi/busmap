@@ -26,22 +26,27 @@ const ColorButton = styled(Button)(() => ({
 
 const AddBusStop = ({onCancel, radius, changeRadius, position}) => {
 
+
+    const [type, setType] = useState({
+        bus: false,
+        trolleybus: false,
+        tram: false,
+        taxi: false,
+    })
     const [stop, setStop] = useState(
         {
-            name: "",
-            description: "",
-            bus: false,
-            trolleybus: false,
-            tram: false,
-            taxi: false,
-            radius: 50,
-            position: ""
+            n: "",
+            tp:0,
+            d: "",
+            sh:0,
+            r: 50,
+            p: {}
         });
 
 
     const handleChange = (e) => {
         const name = e.target.name
-        setStop(prevState => ({
+        setType(prevState => ({
             ...prevState,
             [name]: e.target.checked
         }))
@@ -60,13 +65,15 @@ const AddBusStop = ({onCancel, radius, changeRadius, position}) => {
 
         setStop(prev => ({
             ...prev,
-            radius: radius,
-            position: position
+            position: {
+                x: position.lat,
+                y:position.lng,
+                r: radius
+            }
         }));
 
     }
 
-    console.log(stop)
     return (
         <Grid container>
             <Grid item container justifyContent={"space-between"}
