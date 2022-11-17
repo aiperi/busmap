@@ -25,7 +25,7 @@ const ColorButton2 = styled(Button)(() => ({
     color: 'white',
     textTransform: "capitalize",
     margin: "5px",
-    backgroundColor: "#608a34",
+    backgroundColor: "#498c05",
     boxShadow: "none",
     '&:hover': {
         backgroundColor: "#619d1d",
