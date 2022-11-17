@@ -130,8 +130,6 @@ const BusStopsMap = () => {
                                         setZoom(10)
                                     }
                                 }}
-
-
                             >
                                 { /* Child components, such as markers, info windows, etc. */}
                                 <MarkerClusterer styles={styles}>
@@ -165,7 +163,6 @@ const BusStopsMap = () => {
                                         }}
                                     />
                                 )}
-
 
                                 {selectedMarker && (
                                     <InfoWindow position={selectedMarker.position}>
