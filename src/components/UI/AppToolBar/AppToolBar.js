@@ -194,12 +194,13 @@ const AppToolBar = () => {
                                 <MenuItem key={link.name} onClick={handleCloseUserMenu}>
 
                                     <Button
-                                        textAlign="center"
                                         sx={{
                                             color: "#166767",
                                             display: "flex",
                                             alignItems: 'center',
-                                            textTransform:"capitalize"
+                                            textTransform:"capitalize",
+                                            textAlign:"center"
+
                                         }
                                         }
                                         onClick={()=>navigate(link.route)}

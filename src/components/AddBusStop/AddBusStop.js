@@ -6,7 +6,6 @@ import DirectionsTransitIcon from "@mui/icons-material/DirectionsTransit";
 import TramIcon from "@mui/icons-material/Tram";
 import LocalTaxiIcon from "@mui/icons-material/LocalTaxi";
 import {styled} from "@mui/material/styles";
-import {useDispatch} from "react-redux";
 
 
 const style = {
@@ -50,6 +49,7 @@ const AddBusStop = ({onCancel, radius, changeRadius, position}) => {
             ...prevState,
             [name]: e.target.checked
         }))
+        console.log(type)
     };
 
     const onChangeHandler = (e) => {

@@ -15,7 +15,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     },
 }));
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(()=> ({
    transportTypesBtn:{
        textTransform: "capitalize",
        color:"#166767",
@@ -38,8 +38,8 @@ const TransportTypes = () => {
     ]
     return (
         <Grid container style={{width:"100%", backgroundColor:"whitesmoke", padding:"5px"}}>
-            {types.map(type=>(
-                <Grid item style={{marginRight:"50px"}}>
+            {types.map((type,i)=>(
+                <Grid item style={{marginRight:"50px"}} key={i}>
                     <button className={classes.transportTypesBtn}>
                         <StyledBadge badgeContent={type.amount} color="primary">
                             {type.name}

@@ -140,7 +140,7 @@ const BusStopsMap = () => {
                                             <Marker
                                                 position={stop.position}
                                                 options={{icon: busMarker}}
-                                                key={stop.position.lat}
+                                                key={stop.position.lat+stop.position.lng}
                                                 clusterer={clusterer}
                                                 onMouseDown={() => {
                                                     setSelectedMarker(stop)
@@ -159,7 +159,7 @@ const BusStopsMap = () => {
                                         options={options}
                                         onRadiusChanged={handleCircleRadius}
                                         onLoad={(circle) => setCircle(circle)}
-                                        onUnmount={(circle) => {
+                                        onUnmount={() => {
                                             setCircle(null);
                                             setRadius(50)
                                         }}
