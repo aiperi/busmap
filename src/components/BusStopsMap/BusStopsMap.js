@@ -56,7 +56,8 @@ const BusStopsMap = () => {
     const [isAddStop, setIsAddStop] = useState(false);
     const [newMarker, setNewMarker] = useState(null);
     const [radius, setRadius] = useState(50);
-    const [circle, setCircle] = useState(null)
+    const [circle, setCircle] = useState(null);
+
 
     const center = useMemo(() => ({
         lat: 42.880961762656284,

@@ -5,7 +5,7 @@ export const {
     fetchStopsRequest,
     fetchStopsFailure,
     fetchStopsSuccess,
-    addStopsRequest,
+    addStopRequest,
     addStopSuccess,
     addStopFailure,
 } = stopSlice.actions;

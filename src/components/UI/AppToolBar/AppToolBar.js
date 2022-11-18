@@ -17,6 +17,7 @@ import KeyIcon from '@mui/icons-material/Key';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import {apiKey, busStops, dashboard, login, reports, rides, routes, tracking} from "../../../paths";
 import {Link, useLocation, useNavigate} from "react-router-dom";
+import {logout} from "../../../store/actions/usersActions";
 
 const AppToolBar = () => {
     const navigate = useNavigate();

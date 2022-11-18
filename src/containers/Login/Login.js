@@ -5,8 +5,8 @@ import {makeStyles} from "@mui/styles";
 import {Container, Grid} from "@mui/material";
 import loginLogo from "../../assets/images/APTOSH_login_logo.png";
 import {clearError, loginUser} from "../../store/actions/usersActions";
-import {useDispatch} from "react-redux";
-
+import {useDispatch, useSelector} from "react-redux";
+import { Alert } from '@mui/material';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -28,9 +28,11 @@ const useStyles = makeStyles(theme => ({
 const Login = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
-
+const error = useSelector(state => state.users.loginError);
+const loading = useSelector(state => state.users.loginLoading);
+    console.log(error)
     const [user, setUser] = useState({
-        name: '',
+        username: '',
         password: '',
     });
 
@@ -68,12 +70,12 @@ const Login = () => {
                             src={loginLogo} alt="aptosh-logo"/>
                     </div>
 
-                    {/*{*/}
-                    {/*    error &&*/}
-                    {/*    <Alert severity="error" className={classes.alert}>*/}
-                    {/*        {error.message || error.global}*/}
-                    {/*    </Alert>*/}
-                    {/*}*/}
+                    {
+                        error &&
+                        <Alert severity="error" className={classes.alert}>
+                            {error}
+                        </Alert>
+                    }
                     <Grid
                         component="form"
                         container
@@ -110,8 +112,8 @@ const Login = () => {
                                 variant="contained"
                                 color="primary"
                                 sx={{backgroundColor:"#166767"}}
-                                // loading={loading}
-                                // disabled={loading}
+                                loading={loading}
+                                disabled={loading}
                             >
                                 Log in
                             </ButtonWithProgress>

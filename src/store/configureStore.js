@@ -4,10 +4,17 @@ import {rootSagas} from "./rootSagas";
 import {configureStore} from "@reduxjs/toolkit";
 import {loadFromLocalStorage, saveToLocalStorage} from "./localStorage";
 import usersSlice, {initialState} from "./slices/userSlice";
+import stopSlice from "./slices/stopSlice";
+import axiosApi from "../axiosApi";
+import {getCookie} from "react-use-cookie";
+
+const csrfToken = getCookie('csrftoken');
 
 
 const rootReducer = combineReducers({
     'users': usersSlice.reducer,
+    'stops':stopSlice.reducer,
+
 });
 
 
@@ -34,6 +41,15 @@ store.subscribe(() => {
             user: store.getState().users.user
         },
     });
+});
+
+
+axiosApi.interceptors.request.use(config => {
+    try {
+        config.headers['X-CSRFToken'] = csrfToken;
+    } catch (e) {}
+
+    return config;
 });
 
 
