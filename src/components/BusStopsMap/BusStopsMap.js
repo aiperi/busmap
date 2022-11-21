@@ -1,6 +1,6 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Grid} from "@mui/material";
-import {Circle, GoogleMap, InfoWindow, Marker, MarkerClusterer, useLoadScript} from '@react-google-maps/api';
+import {Circle, GoogleMap, InfoWindowF, MarkerF, MarkerClusterer, useLoadScript} from '@react-google-maps/api';
 
 import {makeStyles} from "@mui/styles";
 import AutocompleteSearch from "../AutocompleteSearch/AutocompleteSearch";
@@ -8,8 +8,9 @@ import Preloader from "../UI/Preloader/Preloader";
 import busMarker from '../../assets/images/busMarker.png'
 import circle from '../../assets/images/circle.png'
 import AddBusStop from "../AddBusStop/AddBusStop";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {nanoid} from "nanoid";
+import {fetchStopsRequest} from "../../store/actions/stopsActions";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -53,6 +54,7 @@ const options = {
 
 
 const BusStopsMap = ({stops}) => {
+    const dispatch = useDispatch();
     const classes = useStyles();
     const busStops = useSelector(state => state.stops.stops)
     const [selectedMarker, setSelectedMarker] = useState("");
@@ -60,7 +62,7 @@ const BusStopsMap = ({stops}) => {
     const [newMarker, setNewMarker] = useState(null);
     const [radius, setRadius] = useState(50);
     const [circle, setCircle] = useState(null);
-    const one = stops[0];
+    const one = busStops[0];
     const positionOne = {lat:one?.p[0].y, lng:one?.p[0].x}
 
 
@@ -76,6 +78,12 @@ const BusStopsMap = ({stops}) => {
         googleMapsApiKey: "AIzaSyD8VJHZ2vIQNxAZZ1hf0vKnEa3KjmXM1Pg",
     });
 
+
+    useEffect(() => {
+        if (isLoaded) {
+            dispatch(fetchStopsRequest())
+        };
+    }, [isLoaded]);
 
     const handleCircleRadius = () => {
         circle && setRadius(parseInt(circle['radius']))
@@ -148,7 +156,7 @@ if(one){
                                 <MarkerClusterer styles={styles}>
                                     {(clusterer) =>
                                         busStops.map(stop => (
-                                         <Marker
+                                         <MarkerF
                                              position={{lat: stop.p[0].y, lng: stop.p[0].x}}
                                              options={{icon: busMarker}}
                                              key={nanoid()}
@@ -165,7 +173,7 @@ if(one){
 
 
                                 {one && (
-                                    <Marker
+                                    <MarkerF
                                         position={positionOne}
                                         options={{icon: busMarker}}
                                         // key={nanoid()}
@@ -195,9 +203,9 @@ if(one){
                                 )}
 
                                 {selectedMarker && (
-                                    <InfoWindow position={{lat: selectedMarker.p[0].x, lng: selectedMarker.p[0].y}}>
+                                    <InfoWindowF position={{lat: selectedMarker.p[0].x, lng: selectedMarker.p[0].y}}>
                                         <h4>{selectedMarker.n}</h4>
-                                    </InfoWindow>
+                                    </InfoWindowF>
                                 )}
                                 {isAddStop && (
                                     <div style={{position: "absolute", zIndex: 555, bottom: 0, width: "100%"}}>
