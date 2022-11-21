@@ -46,7 +46,7 @@ store.subscribe(() => {
 
 axiosApi.interceptors.request.use(config => {
     try {
-        config.headers['X-CSRFToken'] = csrfToken;
+        config.headers['Authorization'] = 'Token 285cee9da8f97a30bc9d29d476b2d52ecb148cea';
     } catch (e) {}
 
     return config;

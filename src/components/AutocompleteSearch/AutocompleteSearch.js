@@ -6,6 +6,7 @@ import {makeStyles} from "@mui/styles";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {IconButton} from "@mui/material";
+import {nanoid} from "nanoid";
 
 
 const useStyles = makeStyles(theme => ({
@@ -36,36 +37,24 @@ const style = {
     color: "grey"
 }
 
-const AutocompleteSearch = () => {
+const AutocompleteSearch = ({busStops}) => {
     const classes = useStyles();
     const [showBtn, setShowBtn] = useState(true);
     const [currentId, setCurrentId] = useState(null)
 
 
-    const streets = [
-        {name: 'Ахунбаева', location: " 74.0050 65.000565", id: 1},
-        {name: 'Исанова', location: " 74.0050 65.000565", id: 2},
-        {name: 'Горький', location: " 74.0050 65.000565", id: 3},
-        {name: "Ауэзова", location: " 74.0050 65.000565", id: 4},
-        {name: "Турусбекова", location: " 74.0050 65.000565", id: 5},
-        {name: "Ленина", location: " 74.0050 65.000565", id: 6},
-        {name: "Пушкина", location: " 74.0050 65.000565"},
-        {name: "Манаса", location: " 74.0050 65.000565"},
-        {name: "Советская", location: " 74.0050 65.000565"},
-        {name: "Абдрахманова", location: " 74.0050 65.000565"},
-    ]
 
     return (
         <Autocomplete
             id="combo-box-demo"
             open={true}
-            options={streets}
+            options={busStops}
             style={{
                 height: "100%",
                 width: "100%",
             }}
             ListboxProps={{style: {maxHeight: '70vh'}}}
-            getOptionLabel={(option) => `${option.name} ${option.location}`}
+            getOptionLabel={(option) => `${option.n} ${option.p[0].x} ${option.p[0].y}`}
             renderOption={(props, option) => {
                 return (
                     <>
@@ -74,10 +63,11 @@ const AutocompleteSearch = () => {
                                  setCurrentId(event.target.id)
                                  setShowBtn(true);
                              })}
+                             key={nanoid()}
                         >
                             <div>
-                                {option.name}
-                                <p><i style={{fontSize: "12px"}}>{option.location}</i></p>
+                                {option.n}
+                                <p><i style={{fontSize: "12px"}}>{option.p[0].x} {option.p[0].y}</i></p>
                                 <DirectionsBusIcon
                                     sx={{
                                         color: "green",

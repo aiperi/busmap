@@ -13,7 +13,7 @@ import {toast} from "react-toastify";
 
 export function* fetchStopsSagas() {
     try {
-        const response = yield axiosApi.get('/stops/');
+        const response = yield axiosApi.get('/stops');
         yield put(fetchStopsSuccess(response.data));
         console.log(response.data)
     } catch (e) {
