@@ -35,16 +35,16 @@ const Map = ({busStops}) => {
 
             }}
 
-            onRightClick={(ev) => {
-                const position = {
-                    lat: ev.latLng.lat(),
-                    lng: ev.latLng.lng(),
-                }
-            //     setNewMarker(position)
-            //     setZoom(16)
-            dispatch(setIsAddStop())
-            //
-            }}
+            // onRightClick={(ev) => {
+            //     const position = {
+            //         lat: ev.latLng.lat(),
+            //         lng: ev.latLng.lng(),
+            //     }
+            // //     setNewMarker(position)
+            // //     setZoom(16)
+            // dispatch(setIsAddStop())
+            // //
+            // }}
         >
             {/*Child components, such as markers, info windows, etc. */}
 
