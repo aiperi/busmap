@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Grid} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import moment from "moment/moment";
@@ -11,6 +11,8 @@ import {useNavigate} from "react-router-dom";
 import {busStops, rides, routes, tracking} from "../../paths";
 import {buildStyles, CircularProgressbar} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import {fetchStopsRequest} from "../../store/actions/stopsActions";
+import {useDispatch} from "react-redux";
 
 
 const useStyles = makeStyles(theme => ({
@@ -73,6 +75,8 @@ const Dashboard = () => {
     const date = new Date();
     const currentDate = moment(date).format('DD-MM-YYYY');
     const hour = date.getHours() + ":" + date.getMinutes();
+
+
 
     const percentage = 78;
 

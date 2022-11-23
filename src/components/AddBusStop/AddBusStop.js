@@ -6,6 +6,8 @@ import DirectionsTransitIcon from "@mui/icons-material/DirectionsTransit";
 import TramIcon from "@mui/icons-material/Tram";
 import LocalTaxiIcon from "@mui/icons-material/LocalTaxi";
 import {styled} from "@mui/material/styles";
+import {addStopRequest} from "../../store/actions/stopsActions";
+import {useDispatch} from "react-redux";
 
 
 const style = {
@@ -24,7 +26,7 @@ const ColorButton = styled(Button)(() => ({
 }));
 
 const AddBusStop = ({onCancel, radius, changeRadius, position}) => {
-
+    const dispatch = useDispatch();
 
     const [type, setType] = useState({
         bus: false,
@@ -35,11 +37,15 @@ const AddBusStop = ({onCancel, radius, changeRadius, position}) => {
     const [stop, setStop] = useState(
         {
             n: "",
-            tp:0,
+            tp:1,
             d: "",
             sh:0,
             r: 50,
-            p: {}
+            p:{
+                x: position.lat,
+                y:position.lng,
+                r:radius,
+            },
         });
 
 
@@ -63,15 +69,13 @@ const AddBusStop = ({onCancel, radius, changeRadius, position}) => {
 
     const submitNewStop = () => {
 
-        setStop(prev => ({
-            ...prev,
-            position: {
-                x: position.lat,
-                y:position.lng,
-                r: radius
-            }
-        }));
+        // setStop(prev => ({
+        //     ...prev,
+        // }));
 
+
+        dispatch(addStopRequest({...stop}))
+        console.log("stop in submit", stop)
     }
 
     return (
@@ -79,10 +83,10 @@ const AddBusStop = ({onCancel, radius, changeRadius, position}) => {
             <Grid item container justifyContent={"space-between"}
                   sx={{padding: "25px 15px", backgroundColor: "white", border: "1px solid grey"}}>
                 <TextField
-                    name="name"
+                    name="n"
                     variant={"outlined"}
                     placeholder={"Название"}
-                    value={stop.name}
+                    value={stop.n}
                     onChange={onChangeHandler}
                     sx={{
                         width: "33%",
@@ -97,10 +101,10 @@ const AddBusStop = ({onCancel, radius, changeRadius, position}) => {
                     inputProps={{style: {height: "2px"}}}
                 />
                 <TextField
-                    name="description"
+                    name="d"
                     variant={"outlined"}
                     placeholder={"Описание"}
-                    value={stop.description}
+                    value={stop.d}
                     onChange={onChangeHandler}
                     sx={{
                         width: "37%",

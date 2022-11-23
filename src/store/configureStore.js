@@ -2,13 +2,12 @@ import {combineReducers} from "redux";
 import createSagaMiddleware from 'redux-saga';
 import {rootSagas} from "./rootSagas";
 import {configureStore} from "@reduxjs/toolkit";
-import {loadFromLocalStorage, saveToLocalStorage} from "./localStorage";
-import usersSlice, {initialState} from "./slices/userSlice";
+import {loadFromLocalStorage} from "./localStorage";
+import usersSlice from "./slices/userSlice";
 import stopSlice from "./slices/stopSlice";
 import axiosApi from "../axiosApi";
-import {getCookie} from "react-use-cookie";
 
-const csrfToken = getCookie('csrftoken');
+// const csrfToken = getCookie('csrftoken');
 
 
 const rootReducer = combineReducers({
@@ -34,14 +33,14 @@ const store = configureStore({
 sagaMiddleware.run(rootSagas);
 
 
-store.subscribe(() => {
-    saveToLocalStorage({
-        users: {
-            ...initialState,
-            user: store.getState().users.user
-        },
-    });
-});
+// store.subscribe(() => {
+//     saveToLocalStorage({
+//         users: {
+//             ...initialState,
+//             user: store.getState().users.user
+//         },
+//     });
+// });
 
 
 axiosApi.interceptors.request.use(config => {

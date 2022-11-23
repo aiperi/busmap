@@ -6,6 +6,7 @@ const initialState = {
     stops: [],
     fetchLoading: false,
     addLoading: false,
+    isAddStop:false,
 }
 
 const stopSlice = createSlice({
@@ -31,7 +32,11 @@ const stopSlice = createSlice({
             ,
             addStopFailure(state) {
                 state.addLoading = false;
-            }
+            },
+            setIsAddStop(state){
+                state.isAddStop =!state.isAddStop;
+            },
+
 
         }
     })

@@ -8,4 +8,5 @@ export const {
     addStopRequest,
     addStopSuccess,
     addStopFailure,
+    setIsAddStop
 } = stopSlice.actions;
