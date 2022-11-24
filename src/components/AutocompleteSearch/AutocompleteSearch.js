@@ -7,6 +7,7 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {IconButton} from "@mui/material";
 import {nanoid} from "nanoid";
+import {useSelector} from "react-redux";
 
 
 const useStyles = makeStyles(theme => ({
@@ -40,15 +41,14 @@ const style = {
 const AutocompleteSearch = ({busStops}) => {
     const classes = useStyles();
     const [showBtn, setShowBtn] = useState(true);
-    const [currentId, setCurrentId] = useState(null)
-
-
+    const [currentId, setCurrentId] = useState(null);
+    const stops = useSelector(state => state.stops.stops)
 
     return (
         <Autocomplete
             id="combo-box-demo"
             open={true}
-            options={busStops}
+            options={stops}
             style={{
                 height: "100%",
                 width: "100%",
@@ -74,14 +74,14 @@ const AutocompleteSearch = ({busStops}) => {
                                         fontSize: "12px",
                                     }}/>
                             </div>
-                                <div style={{position: "absolute", top: "0", right: "0"}}>
-                                    <IconButton aria-label="edit">
-                                        <ModeEditIcon sx={style}/>
-                                    </IconButton>
-                                    <IconButton aria-label="delete">
-                                        <DeleteIcon sx={style}/>
-                                    </IconButton>
-                                </div>
+                                {/*<div style={{position: "absolute", top: "0", right: "0"}}>*/}
+                                {/*    <IconButton aria-label="edit">*/}
+                                {/*        <ModeEditIcon sx={style}/>*/}
+                                {/*    </IconButton>*/}
+                                {/*    <IconButton aria-label="delete">*/}
+                                {/*        <DeleteIcon sx={style}/>*/}
+                                {/*    </IconButton>*/}
+                                {/*</div>*/}
                         </div>
                     </>
                 );
