@@ -38,57 +38,62 @@ const style = {
     color: "grey"
 }
 
-const AutocompleteSearch = ({busStops}) => {
+const AutocompleteSearch = () => {
     const classes = useStyles();
     const [showBtn, setShowBtn] = useState(true);
     const [currentId, setCurrentId] = useState(null);
     const stops = useSelector(state => state.stops.stops)
 
     return (
-        <Autocomplete
-            id="combo-box-demo"
-            open={true}
-            options={stops}
-            style={{
-                height: "100%",
-                width: "100%",
-            }}
-            ListboxProps={{style: {maxHeight: '70vh'}}}
-            getOptionLabel={(option) => `${option.n} ${option.p[0].x} ${option.p[0].y}`}
-            renderOption={(props, option) => {
-                return (
-                    <>
-                        <div className={classes.autocomplete}
-                             onMouseEnter={(event => {
-                                 setCurrentId(event.target.id)
-                                 setShowBtn(true);
-                             })}
-                             key={nanoid()}
-                        >
-                            <div>
-                                {option.n}
-                                <p><i style={{fontSize: "12px"}}>{option.p[0].x} {option.p[0].y}</i></p>
-                                <DirectionsBusIcon
-                                    sx={{
-                                        color: "green",
-                                        fontSize: "12px",
-                                    }}/>
-                            </div>
-                                {/*<div style={{position: "absolute", top: "0", right: "0"}}>*/}
-                                {/*    <IconButton aria-label="edit">*/}
-                                {/*        <ModeEditIcon sx={style}/>*/}
-                                {/*    </IconButton>*/}
-                                {/*    <IconButton aria-label="delete">*/}
-                                {/*        <DeleteIcon sx={style}/>*/}
-                                {/*    </IconButton>*/}
-                                {/*</div>*/}
-                        </div>
-                    </>
-                );
-            }}
-            sx={{width: 300}}
-            renderInput={(params) => <TextField {...params} label="Улица"/>}
-        />
+        <>
+            {stops && (
+                <Autocomplete
+                    id="combo-box-demo"
+                    open={true}
+                    options={stops}
+                    style={{
+                        height: "100%",
+                        width: "100%",
+                    }}
+                    ListboxProps={{style: {maxHeight: '70vh'}}}
+                    getOptionLabel={(option) => `${option.n} ${option.p[0]?.x} ${option.p[0]?.y}`}
+                    renderOption={(props, option) => {
+                        return (
+                            <>
+                                <div className={classes.autocomplete}
+                                     onMouseEnter={(event => {
+                                         setCurrentId(event.target.id)
+                                         setShowBtn(true);
+                                     })}
+                                     key={nanoid()}
+                                >
+                                    <div>
+                                        {option.n}
+                                        <p><i style={{fontSize: "12px"}}>{option.p[0].x} , {option.p[0].y}</i></p>
+                                        <DirectionsBusIcon
+                                            sx={{
+                                                color: "green",
+                                                fontSize: "12px",
+                                            }}/>
+                                    </div>
+                                    {/*<div style={{position: "absolute", top: "0", right: "0"}}>*/}
+                                    {/*    <IconButton aria-label="edit">*/}
+                                    {/*        <ModeEditIcon sx={style}/>*/}
+                                    {/*    </IconButton>*/}
+                                    {/*    <IconButton aria-label="delete">*/}
+                                    {/*        <DeleteIcon sx={style}/>*/}
+                                    {/*    </IconButton>*/}
+                                    {/*</div>*/}
+                                </div>
+                            </>
+                        );
+                    }}
+                    sx={{width: 300}}
+                    renderInput={(params) => <TextField {...params} label="Улица"/>}
+                />
+            )}
+        </>
+
     );
 };
 

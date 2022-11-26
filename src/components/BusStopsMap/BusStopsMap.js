@@ -33,13 +33,8 @@ const BusStopsMap = () => {
     const [newMarker, setNewMarker] = useState(null);
     const [radius, setRadius] = useState(50);
     const [circle, setCircle] = useState(null);
-
     const [showM, setShowM] = useState(false);
 
-
-
-
-    console.log(selectedMarker);
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyD8VJHZ2vIQNxAZZ1hf0vKnEa3KjmXM1Pg",
     });
@@ -52,6 +47,11 @@ const BusStopsMap = () => {
 
     const onCancel = () => {
        setIsAddStop(false)
+        setNewMarker(null);
+    }
+
+    const onAdd = () => {
+        setIsAddStop(false)
         setNewMarker(null);
     }
 
@@ -107,7 +107,7 @@ const res = useMemo(()=>{
     }
 return markerClusterer();
 
-},[])
+},[busStops])
 
 
     const res2 = useMemo(()=>{
@@ -116,11 +116,10 @@ return markerClusterer();
                 <GoogleMap
                     mapContainerStyle={container}
                     center={center}
-                    zoom={12}
+                    zoom={11}
                     onLoad={onLoad}
                     onUnmount={onUnmount}
                     options={{
-                        // mapTypeId: 'satelite',
 
                     }}
 
@@ -130,13 +129,50 @@ return markerClusterer();
                             lng: ev.latLng.lng(),
                         }
                         setNewMarker(position)
-                            // setZoom(16)
                         setIsAddStop(true)
-                        //
                     }}
                 >
                     {/*Child components, such as markers, info windows, etc. */}
-                    {res}
+                    {/*{res}*/}
+
+
+
+
+                    <MarkerClusterer styles={styles}>
+                        {(clusterer) =>
+                            busStops && busStops.map(stop => (
+                                <Marker
+                                    position={{lat: stop.p[0].y, lng: stop.p[0].x}}
+                                    options={{icon: busMarker}}
+                                    key={nanoid()}
+                                    clusterer={clusterer}
+                                    tracksViewChanges={false}
+                                    onMouseOver={() => {
+                                        setSelectedMarker(stop)
+                                    }}
+                                    onMouseOut={() =>
+                                        setSelectedMarker("")
+                                    }
+
+                                >
+
+                                    {/*<InfoWindow*/}
+                                    {/*    position={{lat: stop.p[0].y, lng: stop.p[0].x}}*/}
+                                    {/*    visible={true}*/}
+                                    {/*>*/}
+
+                                </Marker>
+                            ))}
+
+                    </MarkerClusterer>
+
+
+
+
+
+
+
+
 
                     {newMarker && (
                         <Circle
@@ -163,7 +199,7 @@ return markerClusterer();
         }
         return map();
 
-    },[newMarker])
+    },[isAddStop, newMarker, radius])
 
 
 
@@ -173,8 +209,7 @@ return markerClusterer();
     return (
         <Grid container>
             <Grid item width={"25%"} className={classes.streetsBox}>
-                <AutocompleteSearch />
-                {/*<CustomAutocomplete/>*/}
+                {/*<AutocompleteSearch />*/}
             </Grid>
             <Grid item width={"75%"}>
 
@@ -192,6 +227,7 @@ return markerClusterer();
                                         changeRadius={radiusChangeHandler}
                                         radius={radius}
                                         position={newMarker}
+                                        onAdd={onAdd}
                                     />
                                 </div>
                             )}

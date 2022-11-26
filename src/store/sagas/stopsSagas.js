@@ -23,13 +23,12 @@ export function* fetchStopsSagas() {
 }
 
 export function* AddStopsSagas({payload}) {
+    console.log(payload)
     try {
         const response = yield axiosApi.post('/stop/', payload);
         yield put(addStopSuccess());
-
+        console.log(response)
     } catch (e) {
-        console.log('Не удалось добавить');
-        console.log(e);
         yield put(addStopFailure());
     }
 }

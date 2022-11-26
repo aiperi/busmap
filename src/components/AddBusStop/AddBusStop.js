@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Checkbox, Grid, TextField, Tooltip, Typography} from "@mui/material";
 import {blue, green, pink, yellow} from "../../colors";
 import DirectionsBusFilledIcon from "@mui/icons-material/DirectionsBusFilled";
@@ -6,7 +6,7 @@ import DirectionsTransitIcon from "@mui/icons-material/DirectionsTransit";
 import TramIcon from "@mui/icons-material/Tram";
 import LocalTaxiIcon from "@mui/icons-material/LocalTaxi";
 import {styled} from "@mui/material/styles";
-import {addStopRequest} from "../../store/actions/stopsActions";
+import {addStopRequest, fetchStopsRequest} from "../../store/actions/stopsActions";
 import {useDispatch} from "react-redux";
 
 
@@ -25,29 +25,27 @@ const ColorButton = styled(Button)(() => ({
     },
 }));
 
-const AddBusStop = ({onCancel, radius, changeRadius, position}) => {
+const AddBusStop = ({onCancel, radius, changeRadius, position, onAdd}) => {
     const dispatch = useDispatch();
-
     const [type, setType] = useState({
         bus: false,
         trolleybus: false,
-        tram: false,
         taxi: false,
     })
+
+
+
+
+
+
+    const [transportType, setTransportType] = useState(0)
     const [stop, setStop] = useState(
         {
             n: "",
-            tp:1,
+            tp: 1,
             d: "",
-            sh:0,
-            r: 50,
-            p:{
-                x: position.lat,
-                y:position.lng,
-                r:radius,
-            },
+            sh: 0,
         });
-
 
     const handleChange = (e) => {
         const name = e.target.name
@@ -55,6 +53,7 @@ const AddBusStop = ({onCancel, radius, changeRadius, position}) => {
             ...prevState,
             [name]: e.target.checked
         }))
+
         console.log(type)
     };
 
@@ -62,20 +61,56 @@ const AddBusStop = ({onCancel, radius, changeRadius, position}) => {
         const {name, value} = e.target;
         setStop(prev => ({
             ...prev,
-            [name]: value
+            [name]: value,
+            p:[{
+                x:position.lng,
+                y:position.lat,
+                r:radius
+            }]
         }));
     }
 
 
-    const submitNewStop = () => {
+    useEffect(()=>{
+        setStop(prev => ({
+            ...prev,
+            p:[{
+                x:position.lng,
+                y:position.lat,
+                r:radius
+            }]
+        }));
+    },[radius])
 
-        // setStop(prev => ({
-        //     ...prev,
-        // }));
+    const submitNewStop =  () => {
+
+     // setPositionT(prevState =>( {
+     //     ...prevState,
+     //         x: position.lat,
+     //         y: position.lng,
+     //         r: radius,
+     // }))
 
 
+        // dispatch(addStopRequest({...stop}))
+        console.log("stop in submit",stop)
         dispatch(addStopRequest({...stop}))
-        console.log("stop in submit", stop)
+        dispatch(fetchStopsRequest())
+
+        setStop({
+            n: "",
+            tp: 1,
+            d: "",
+            sh: 0,
+        })
+        setType({
+            bus: false,
+            trolleybus: false,
+            taxi: false,
+        })
+
+        onAdd()
+
     }
 
     return (
@@ -147,18 +182,6 @@ const AddBusStop = ({onCancel, radius, changeRadius, position}) => {
                         />
                     </Tooltip>
 
-                    <Tooltip title="Трамваи" arrow>
-                        <Checkbox
-                            name="tram"
-                            checked={stop.tram}
-                            onChange={handleChange}
-                            inputProps={{'aria-label': 'controlled'}}
-                            icon={<TramIcon
-                                sx={{...style, color: "darkgrey"}}/>}
-                            checkedIcon={<TramIcon sx={{...style, color: pink}}/>}
-                            sx={{backgroundColor: "whitesmoke", "&:hover": {backgroundColor: 'lightgrey'}}}
-                        />
-                    </Tooltip>
 
                     <Tooltip title="Маршрутные такси" arrow>
                         <Checkbox
