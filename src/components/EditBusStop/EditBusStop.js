@@ -5,7 +5,7 @@ import DirectionsBusFilledIcon from "@mui/icons-material/DirectionsBusFilled";
 import DirectionsTransitIcon from "@mui/icons-material/DirectionsTransit";
 import LocalTaxiIcon from "@mui/icons-material/LocalTaxi";
 import {styled} from "@mui/material/styles";
-import {addStopRequest} from "../../store/actions/stopsActions";
+import {editStopRequest} from "../../store/actions/stopsActions";
 import {useDispatch} from "react-redux";
 
 
@@ -24,20 +24,67 @@ const ColorButton = styled(Button)(() => ({
     },
 }));
 
-const AddBusStop = ({onCancel, radius, changeRadius, position, onAdd}) => {
+const EditBusStop = ({onCancel, radius, changeRadius, position, id, onEdit, singleStop, center}) => {
     const dispatch = useDispatch();
     const [type, setType] = useState({
-        bus: false,
-        trolleybus: false,
-        taxi: false,
+        bus: singleStop.tp === 1 && true || singleStop.tp === 4 && true || singleStop.tp === 5 && true || singleStop.tp === 6 && true || false,
+        trolleybus:  singleStop.tp === 2 && true || singleStop.tp === 4 && true || singleStop.tp === 5 && true || singleStop.tp === 7 && true || false,
+        taxi:  singleStop.tp === 3 && true || singleStop.tp === 5 && true || singleStop.tp === 6 && true || singleStop.tp === 7 && true || false,
     })
 
-    const [transportType, setTransportType] = useState(0)
+    // useEffect(()=>{
+    //     if(singleStop.tp === 1){
+    //         setType(prevState => ({
+    //             ...prevState,
+    //             bus: true
+    //         }))
+    //     }else if(singleStop.tp === 2){
+    //         setType(prevState => ({
+    //             ...prevState,
+    //             trolleybus: true
+    //         }))
+    //     }else if(singleStop.tp === 3){
+    //         setType(prevState => ({
+    //             ...prevState,
+    //             taxi: true
+    //         }))
+    //     }else if(singleStop.tp === 4){
+    //         setType(prevState => ({
+    //             ...prevState,
+    //             bus:true,
+    //             trolleybus: true
+    //         }))
+    //     }else if(singleStop.tp === 5){
+    //         setType(prevState => ({
+    //             ...prevState,
+    //             trolleybus: true,
+    //             bus: true,
+    //             taxi: true,
+    //         }))
+    //     }else if(singleStop.tp === 6){
+    //         setType(prevState => ({
+    //             ...prevState,
+    //             bus: true,
+    //             taxi: true,
+    //         }))
+    //     }else if(singleStop.tp === 7){
+    //         setType(prevState => ({
+    //             ...prevState,
+    //             trolleybus: true,
+    //             taxi: true,
+    //         }))
+    //     }
+    //
+    //
+    //
+    // },[singleStop])
+
+
     const [stop, setStop] = useState(
         {
-            n: "Новая остановка",
-            tp: 0,
-            d: "",
+            n: singleStop.n || "",
+            tp: singleStop.tp || 0,
+            d: singleStop.d || "",
             sh: 0,
         });
 
@@ -55,8 +102,8 @@ const AddBusStop = ({onCancel, radius, changeRadius, position, onAdd}) => {
             ...prev,
             [name]: value,
             p:[{
-                x:position.lng,
-                y:position.lat,
+                x:center ? center.lng : position.lng,
+                y:center ? center.lat : position.lat,
                 r:radius
             }]
         }));
@@ -64,7 +111,6 @@ const AddBusStop = ({onCancel, radius, changeRadius, position, onAdd}) => {
 
 
     useEffect(()=>{
-
 
         let typeF = 0;
 
@@ -93,15 +139,15 @@ const AddBusStop = ({onCancel, radius, changeRadius, position, onAdd}) => {
             ...prev,
             tp:typeF,
             p:[{
-                x:position.lng,
-                y:position.lat,
+                x:center ? center.lng : position.lng,
+                y:center ? center.lat : position.lat,
                 r:radius
             }]
         }));
-    },[radius, position, type])
+    },[radius, position, type, center])
 
-    const submitNewStop =  () => {
-        dispatch(addStopRequest({...stop}))
+    const SubmitEdittedStop =  () => {
+        dispatch(editStopRequest({id: id, obj:{...stop}}))
 
         setStop({
             n: "Новая остановка",
@@ -115,7 +161,7 @@ const AddBusStop = ({onCancel, radius, changeRadius, position, onAdd}) => {
             taxi: false,
         })
 
-        onAdd()
+        onEdit()
 
     }
 
@@ -165,7 +211,7 @@ const AddBusStop = ({onCancel, radius, changeRadius, position, onAdd}) => {
                     <Tooltip title="Автобусы" arrow>
                         <Checkbox
                             name="bus"
-                            checked={stop.bus}
+                            checked={type.bus}
                             onChange={handleChange}
                             inputProps={{'aria-label': 'controlled'}}
                             icon={<DirectionsBusFilledIcon
@@ -178,7 +224,7 @@ const AddBusStop = ({onCancel, radius, changeRadius, position, onAdd}) => {
                     <Tooltip title="Тролейбусы" arrow>
                         <Checkbox
                             name="trolleybus"
-                            checked={stop.trolleybus}
+                            checked={type.trolleybus}
                             onChange={handleChange}
                             inputProps={{'aria-label': 'controlled'}}
                             icon={<DirectionsTransitIcon
@@ -192,7 +238,7 @@ const AddBusStop = ({onCancel, radius, changeRadius, position, onAdd}) => {
                     <Tooltip title="Маршрутные такси" arrow>
                         <Checkbox
                             name='taxi'
-                            checked={stop.taxi}
+                            checked={type.taxi}
                             onChange={handleChange}
                             inputProps={{'aria-label': 'controlled'}}
                             icon={<LocalTaxiIcon
@@ -231,11 +277,11 @@ const AddBusStop = ({onCancel, radius, changeRadius, position, onAdd}) => {
                 </div>
                 <div>
                     <ColorButton variant={"contained"} onClick={onCancel}>Отменить</ColorButton>
-                    <ColorButton variant={"contained"} onClick={submitNewStop}>Сохранить</ColorButton>
+                    <ColorButton variant={"contained"} onClick={SubmitEdittedStop}>Сохранить</ColorButton>
                 </div>
             </Grid>
         </Grid>
     );
 };
 
-export default AddBusStop;
+export default EditBusStop;

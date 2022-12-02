@@ -1,0 +1,12 @@
+.transportTypesBtn {
+text-transform: capitalize;
+color: #166767;
+padding: 8px;
+}
+.transportTypesBtn:hover {
+    background-color: #98B8B8
+}
+
+.active{
+    background-color: #63a1a1
+}

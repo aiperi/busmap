@@ -8,7 +8,7 @@ import {makeStyles} from "@mui/styles";
 import lineImg from '../../assets/images/line.png'
 import LocalTaxiIcon from '@mui/icons-material/LocalTaxi';
 
-const useStyle = makeStyles(theme => ({
+const useStyle = makeStyles(()=> ({
     stopItem: {
         display: "inline-block",
         height: "71px",
@@ -92,7 +92,6 @@ const useStyle = makeStyles(theme => ({
         width: "45px",
         zIndex: 1,
         left:"35px"
-
     },
 
     slow:{
@@ -148,13 +147,31 @@ const TrackingStops = () => {
                             </div>
                             <div className={classes.number}>{i + 1}</div>
 
-                            <div className={classes.iconWrapper}><LocalTaxiIcon className={classes.taxiIcon}/></div>
-                            <div className={`
+                            {i===6 && (
+                                <>
+                                    <div className={classes.iconWrapper}><LocalTaxiIcon className={classes.taxiIcon}/></div>
+                                    <div className={`
                             ${classes.dash}
                           `}></div>
-                            <div className={`${classes.statusLabel} ${classes.slow}`}>
-                                <span className={classes.value}>70min</span>
-                            </div>
+                                    <div className={`${classes.statusLabel} ${classes.slow}`}>
+                                        <span className={classes.value}>-10min</span>
+                                    </div>
+                                </>
+                            )}
+
+
+                            {i===16 && (
+                                <>
+                                    <div className={classes.iconWrapper}><LocalTaxiIcon className={classes.taxiIcon}/></div>
+                                    <div className={`
+                            ${classes.dash}
+                          `}></div>
+                                    <div className={`${classes.statusLabel} ${classes.slow}`}>
+                                        <span className={classes.value}>-10min</span>
+                                    </div>
+                                </>
+                            )}
+
                         </div>
                     ))}
 

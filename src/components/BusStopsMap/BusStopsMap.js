@@ -9,7 +9,10 @@ import {useSelector} from "react-redux";
 import {container, options, styles} from "./style";
 import {nanoid} from "nanoid";
 import busMarker from '../../assets/images/busMarker.png'
-import CustomAutocomplete from "../AutocompleteSearch/CustomAutocomplete";
+import unknown from '../../assets/images/unknown.png'
+import taxi from '../../assets/images/taxi.png'
+import trolleybus from '../../assets/images/bus.png'
+import EditBusMap from "../EditBusStop/EditBusMap";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -33,7 +36,10 @@ const BusStopsMap = () => {
     const [newMarker, setNewMarker] = useState(null);
     const [radius, setRadius] = useState(50);
     const [circle, setCircle] = useState(null);
-    const [showM, setShowM] = useState(false);
+    const singleStop = useSelector(state => state.stops.singleStop);
+    const showEdit = useSelector(state => state.stops.editOpen);
+    const editStopId=useSelector(state => state.stops.editStopId);
+
 
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyD8VJHZ2vIQNxAZZ1hf0vKnEa3KjmXM1Pg",
@@ -46,7 +52,7 @@ const BusStopsMap = () => {
 
 
     const onCancel = () => {
-       setIsAddStop(false)
+        setIsAddStop(false)
         setNewMarker(null);
     }
 
@@ -61,57 +67,63 @@ const BusStopsMap = () => {
 
 
     const center = useMemo(() => ({
-        lat: 40.514294706806,
-        lng: 72.81657725917724,
-    }), [])
+        lat: singleStop ? singleStop.p[0].y : 40.514294706806,
+        lng: singleStop ? singleStop.p[0].x : 72.81657725917724,
+    }), [singleStop])
 
 
     const onLoad = useCallback((map) => {
         mapRef.current = map;
     }, [])
 
-    const onUnmount = useCallback((map)=>(mapRef.current = undefined));
+    const onUnmount = useCallback((map) => (mapRef.current = undefined));
 
 
-const res = useMemo(()=>{
-    const markerClusterer = ()=>{
-        return (
-            <MarkerClusterer styles={styles}>
-                {(clusterer) =>
-                    busStops && busStops.map(stop => (
-                        <Marker
-                            position={{lat: stop.p[0].y, lng: stop.p[0].x}}
-                            options={{icon: busMarker}}
-                            key={nanoid()}
-                            clusterer={clusterer}
-                            tracksViewChanges={false}
-                            onMouseOver={() => {
-                                setSelectedMarker(stop)
-                            }}
-                            onMouseOut={() =>
-                                setSelectedMarker("")
-                            }
+    const res = useMemo(() => {
+        const markerClusterer = () => {
+            return (
+                <MarkerClusterer styles={styles}>
+                    {(clusterer) =>
+                        busStops && busStops.map(stop => (
+                            <Marker
+                                position={{lat: stop.p[0].y, lng: stop.p[0].x}}
+                                options={
+                                    stop.tp === 1 && {icon: busMarker} ||
+                                    stop.tp === 0 && {icon: unknown} ||
+                                    stop.tp === 3 && {icon: taxi} ||
+                                    stop.tp === 2 && {icon: trolleybus} ||
+                                    {icon: busMarker}
+                                }
+                                key={nanoid()}
+                                clusterer={clusterer}
+                                tracksViewChanges={false}
+                                onMouseOver={() => {
+                                    setSelectedMarker(stop)
+                                }}
+                                onMouseOut={() =>
+                                    setSelectedMarker("")
+                                }
 
-                        >
+                            >
 
-                            {/*<InfoWindow*/}
-                            {/*    position={{lat: stop.p[0].y, lng: stop.p[0].x}}*/}
-                            {/*    visible={true}*/}
-                            {/*>*/}
+                                {/*<InfoWindow*/}
+                                {/*    position={{lat: stop.p[0].y, lng: stop.p[0].x}}*/}
+                                {/*    visible={true}*/}
+                                {/*>*/}
 
-                        </Marker>
-                    ))}
+                            </Marker>
+                        ))}
 
-            </MarkerClusterer>
-        )
-    }
-return markerClusterer();
+                </MarkerClusterer>
+            )
+        }
+        return markerClusterer();
 
-},[busStops])
+    }, [busStops])
 
 
-    const res2 = useMemo(()=>{
-        const map = ()=>{
+    const res2 = useMemo(() => {
+        const map = () => {
             return (
                 <GoogleMap
                     mapContainerStyle={container}
@@ -119,9 +131,7 @@ return markerClusterer();
                     zoom={11}
                     onLoad={onLoad}
                     onUnmount={onUnmount}
-                    options={{
-
-                    }}
+                    options={{}}
 
                     onRightClick={(ev) => {
                         const position = {
@@ -133,46 +143,7 @@ return markerClusterer();
                     }}
                 >
                     {/*Child components, such as markers, info windows, etc. */}
-                    {/*{res}*/}
-
-
-
-
-                    <MarkerClusterer styles={styles}>
-                        {(clusterer) =>
-                            busStops && busStops.map(stop => (
-                                <Marker
-                                    position={{lat: stop.p[0].y, lng: stop.p[0].x}}
-                                    options={{icon: busMarker}}
-                                    key={nanoid()}
-                                    clusterer={clusterer}
-                                    tracksViewChanges={false}
-                                    onMouseOver={() => {
-                                        setSelectedMarker(stop)
-                                    }}
-                                    onMouseOut={() =>
-                                        setSelectedMarker("")
-                                    }
-
-                                >
-
-                                    {/*<InfoWindow*/}
-                                    {/*    position={{lat: stop.p[0].y, lng: stop.p[0].x}}*/}
-                                    {/*    visible={true}*/}
-                                    {/*>*/}
-
-                                </Marker>
-                            ))}
-
-                    </MarkerClusterer>
-
-
-
-
-
-
-
-
+                    {res}
 
                     {newMarker && (
                         <Circle
@@ -188,55 +159,73 @@ return markerClusterer();
                         />
                     )}
 
-                    {/*{selectedMarker && (*/}
-                    {/*    <InfoWindow position={{lat: selectedMarker.p[0].y, lng: selectedMarker.p[0].x}}>*/}
-                    {/*        <h4>{selectedMarker.n}</h4>*/}
-                    {/*    </InfoWindow>*/}
-                    {/*)}*/}
+                    {selectedMarker && (
+                        <InfoWindow
+                            position={{lat: selectedMarker.p[0].y, lng: selectedMarker.p[0].x}}
+                            options={{pixelOffset: {width: -20, height: -20,}}}
+                        >
+                            <h4>{selectedMarker.n}</h4>
+                        </InfoWindow>
+                    )}
+
+                    {singleStop && (
+                        <Marker
+                            position={{lat: singleStop.p[0].y, lng: singleStop.p[0].x}}
+                            tracksViewChanges={false}
+                            onMouseOver={() => {
+                                setSelectedMarker(singleStop)
+                            }}
+                            onMouseOut={() =>
+                                setSelectedMarker("")
+                            }
+                        >
+                        </Marker>
+                    )}
+
                 </GoogleMap>
 
             )
         }
         return map();
 
-    },[isAddStop, newMarker, radius])
-
-
-
-
+    }, [isAddStop, newMarker, selectedMarker, busStops, singleStop])
 
 
     return (
         <Grid container>
             <Grid item width={"25%"} className={classes.streetsBox}>
-                {/*<AutocompleteSearch />*/}
+                <AutocompleteSearch/>
             </Grid>
-            <Grid item width={"75%"}>
+            {showEdit ? (
+                <EditBusMap id={editStopId}/>
+            ):(
+                <Grid item width={"75%"}>
 
-                <div className={classes.container}>
+                    <div className={classes.container}>
 
-                    {!isLoaded ? (
-                        <Preloader/>
-                    ) : (
-                        <div style={{position: "relative"}}>
-                            {res2}
-                            {isAddStop && (
-                                <div style={{position: "absolute", zIndex: 555, bottom: 0, width: "100%"}} >
-                                    <AddBusStop
-                                        onCancel={onCancel}
-                                        changeRadius={radiusChangeHandler}
-                                        radius={radius}
-                                        position={newMarker}
-                                        onAdd={onAdd}
-                                    />
-                                </div>
-                            )}
-                        </div>
-                    )}
+                        {!isLoaded ? (
+                            <Preloader/>
+                        ) : (
+                            <div style={{position: "relative"}}>
+                                {res2}
+                                {isAddStop && (
+                                    <div style={{position: "absolute", zIndex: 555, bottom: 0, width: "100%"}}>
+                                        <AddBusStop
+                                            onCancel={onCancel}
+                                            changeRadius={radiusChangeHandler}
+                                            radius={radius}
+                                            position={newMarker}
+                                            onAdd={onAdd}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        )}
 
-                </div>
+                    </div>
 
-            </Grid>
+                </Grid>
+            )}
         </Grid>
 
     );

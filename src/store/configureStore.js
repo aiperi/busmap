@@ -45,7 +45,7 @@ sagaMiddleware.run(rootSagas);
 
 axiosApi.interceptors.request.use(config => {
     try {
-        config.headers['Authorization'] = 'Token 285cee9da8f97a30bc9d29d476b2d52ecb148cea';
+        config.headers['Authorization'] = 'Token 09e9e3d2ceaff3c90f5c20961fd630dd4fab0af8';
     } catch (e) {}
 
     return config;
