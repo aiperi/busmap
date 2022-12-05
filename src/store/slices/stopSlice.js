@@ -15,6 +15,8 @@ const initialState = {
     deleteLoading:false,
     editOpen:false,
     editStopId: null,
+    transportTypes: "Все",
+    showOverlay:false,
 
 }
 
@@ -28,6 +30,7 @@ const stopSlice = createSlice({
             fetchStopsSuccess(state, action) {
                 state.stops = action.payload;
                 state.fetchLoading = false;
+                state.singleStop = null;
             },
             fetchStopsFailure(state) {
                 state.fetchLoading = false;
@@ -85,6 +88,7 @@ const stopSlice = createSlice({
             deleteStopSuccess(state, {payload: id}) {
                 state.deleteLoading = false;
                 state.stops = state.stops.filter(stop => stop._id !== id);
+                state.singleStop = null;
             },
             deleteStopFailure(state, action) {
                 state.deleteLoading = false;
@@ -94,6 +98,7 @@ const stopSlice = createSlice({
             },
             editStopSuccess(state){
                 state.addLoading = false;
+                state.singleStop = null;
             },
             editStopFailure(state){
                 state.addLoading = false;
@@ -106,7 +111,26 @@ const stopSlice = createSlice({
             },
             getStopIdToEdit(state, action){
                 state.editStopId = action.payload;
-            }
+            },
+            changeTransportType(state, action){
+                state.transportTypes = action.payload
+            },
+            showOverlay(state){
+                state.showOverlay = !state.showOverlay;
+            },
+            deleteSelectedStopRequest(state) {
+                state.deleteLoading = true;
+            },
+            deleteSelectedStopSuccess(state, {payload: id}) {
+                state.deleteLoading = false;
+                for (let i = 0; i < id.length; i++) {
+                    state.stops = state.stops.filter(stop => stop._id !== id);
+                }
+                state.singleStop = null;
+            },
+            deleteSelectedStopFailure(state, action) {
+                state.deleteLoading = false;
+            },
 
         }
     })

@@ -90,10 +90,10 @@ const EditStopsMap = ({id}) => {
                 <GoogleMap
                     mapContainerStyle={container}
                     center={center}
-                    zoom={15}
+                    zoom={18}
                     onLoad={onLoad}
                     onUnmount={onUnmount}
-                    options={{draggable:false}}
+                    options={{ mapTypeId: "satellite" } }
 
                     // onClick={(e) => {
                     //     const position = {

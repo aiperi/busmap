@@ -3,7 +3,7 @@ import axiosApi from "../../axiosApi";
 import {
     addStopFailure,
     addStopRequest,
-    addStopSuccess,
+    addStopSuccess, deleteSelectedStopFailure, deleteSelectedStopRequest, deleteSelectedStopSuccess,
     deleteStopFailure,
     deleteStopRequest,
     deleteStopSuccess,
@@ -24,7 +24,7 @@ import {
     fetchStopsRequest,
     fetchStopsSuccess,
     fetchUnknownStops,
-    fetchUnknownStopsRequest
+    fetchUnknownStopsRequest, showOverlay
 } from "../actions/stopsActions";
 import {toast} from "react-toastify";
 import History from "../../History";
@@ -42,7 +42,6 @@ export function* fetchStopsSagas({payload}) {
             yield put(fetchStopsSuccess(response.data));
             console.log(response.data)
         }
-
 
     } catch (e) {
         toast.error('Не удалось загрузить');
@@ -132,13 +131,27 @@ function* deleteStopSaga({payload:id}) {
 
     try {
         yield axiosApi.delete(`/stop/${id}`);
-        yield put(deleteStopSuccess());
+        yield put(deleteStopSuccess(id));
         yield put(fetchStopsRequest())
         toast.success('Остановка удалена!');
     } catch (e) {
         yield put(deleteStopFailure());
     }
 }
+
+
+function* deleteSelectedStopSaga({payload:id}) {
+    try {
+        yield axiosApi.delete(`/stops`, {data:{"ids":id}});
+        yield put(deleteSelectedStopSuccess(id));
+        // yield put(fetchStopsRequest())
+        toast.success('Выбранные остановки удалены!');
+    } catch (e) {
+        yield put(deleteSelectedStopFailure());
+        console.log(e)
+    }
+}
+
 
 
 function* editStopSaga({payload}) {
@@ -167,6 +180,7 @@ const stopsSaga = [
     takeEvery(fetchSingleStopRequest, fetchSingleStopSaga),
     takeEvery(deleteStopRequest, deleteStopSaga),
     takeEvery(editStopRequest, editStopSaga),
+    takeEvery(deleteSelectedStopRequest, deleteSelectedStopSaga),
 ];
 
 export default stopsSaga;

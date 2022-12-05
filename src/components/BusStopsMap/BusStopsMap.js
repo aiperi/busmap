@@ -13,11 +13,13 @@ import unknown from '../../assets/images/unknown.png'
 import taxi from '../../assets/images/taxi.png'
 import trolleybus from '../../assets/images/bus.png'
 import EditBusMap from "../EditBusStop/EditBusMap";
+import Overlay from "../OverlayDiv/Overlay";
 
 const useStyles = makeStyles(() => ({
     container: {
         width: "100%",
         height: "80vh",
+
     },
 
     streetsBox: {
@@ -39,7 +41,7 @@ const BusStopsMap = () => {
     const singleStop = useSelector(state => state.stops.singleStop);
     const showEdit = useSelector(state => state.stops.editOpen);
     const editStopId=useSelector(state => state.stops.editStopId);
-
+const showOverlay = useSelector(state => state.stops.showOverlay);
 
     const {isLoaded} = useLoadScript({
         googleMapsApiKey: "AIzaSyD8VJHZ2vIQNxAZZ1hf0vKnEa3KjmXM1Pg",
@@ -207,6 +209,10 @@ const BusStopsMap = () => {
                             <Preloader/>
                         ) : (
                             <div style={{position: "relative"}}>
+
+                                {showOverlay &&(
+                                    <Overlay/>
+                                )}
                                 {res2}
                                 {isAddStop && (
                                     <div style={{position: "absolute", zIndex: 555, bottom: 0, width: "100%"}}>

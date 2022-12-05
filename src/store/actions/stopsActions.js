@@ -28,5 +28,10 @@ export const {
     editStopRequest,
     showEditOpen,
     hideEditOpen,
-    getStopIdToEdit
+    getStopIdToEdit,
+    changeTransportType,
+    showOverlay,
+  deleteSelectedStopSuccess,
+    deleteSelectedStopFailure,
+    deleteSelectedStopRequest
 } = stopSlice.actions;
