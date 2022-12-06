@@ -133,7 +133,7 @@ const showOverlay = useSelector(state => state.stops.showOverlay);
                     zoom={11}
                     onLoad={onLoad}
                     onUnmount={onUnmount}
-                    options={{}}
+                    options={{ streetViewControl: false}}
 
                     onRightClick={(ev) => {
                         const position = {

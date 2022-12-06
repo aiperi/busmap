@@ -33,5 +33,7 @@ export const {
     showOverlay,
   deleteSelectedStopSuccess,
     deleteSelectedStopFailure,
-    deleteSelectedStopRequest
+    deleteSelectedStopRequest,
+    fetchStopInRoutesRequest,
+    fetchStopInRoutesSuccess,
 } = stopSlice.actions;

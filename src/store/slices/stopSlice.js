@@ -4,19 +4,21 @@ const name = 'stops';
 
 const initialState = {
     stops: [],
-    singleStop:null,
+    singleStop: null,
     fetchLoading: false,
     addLoading: false,
-    allStops:0,
-    stopsForBus:0,
-    stopsForTrolleybus:0,
-    stopsForTaxi:0,
-    unknownStops:0,
-    deleteLoading:false,
-    editOpen:false,
+    allStops: 0,
+    stopsForBus: 0,
+    stopsForTrolleybus: 0,
+    stopsForTaxi: 0,
+    unknownStops: 0,
+    deleteLoading: false,
+    editOpen: false,
     editStopId: null,
     transportTypes: "Все",
-    showOverlay:false,
+    showOverlay: false,
+    stopInRoutes: null,
+    routesCountInStop:0,
 
 }
 
@@ -36,10 +38,10 @@ const stopSlice = createSlice({
                 state.fetchLoading = false;
             },
 
-            fetchSingleStopRequest(state){
+            fetchSingleStopRequest(state) {
 
             },
-            fetchSingleStopSuccess(state, action){
+            fetchSingleStopSuccess(state, action) {
                 state.singleStop = action.payload;
             },
             addStopRequest(state) {
@@ -52,34 +54,34 @@ const stopSlice = createSlice({
             addStopFailure(state) {
                 state.addLoading = false;
             },
-            fetchAllStopsCountRequest(state){
+            fetchAllStopsCountRequest(state) {
 
             },
-            fetchStopsForBusRequest(state){
+            fetchStopsForBusRequest(state) {
 
             },
-            fetchStopsForTrolleybusRequest(state){
+            fetchStopsForTrolleybusRequest(state) {
 
             },
-            fetchStopsForTaxiRequest(state){
+            fetchStopsForTaxiRequest(state) {
 
             },
-            fetchUnknownStopsRequest(state){
+            fetchUnknownStopsRequest(state) {
 
             },
-            fetchAllStopsCountSuccess(state, action){
+            fetchAllStopsCountSuccess(state, action) {
                 state.allStops = action.payload;
             },
-            fetchStopsForBus(state, action){
+            fetchStopsForBus(state, action) {
                 state.stopsForBus = action.payload;
             },
-            fetchStopsForTrolleybus(state, action){
+            fetchStopsForTrolleybus(state, action) {
                 state.stopsForTrolleybus = action.payload;
             },
-            fetchStopsForTaxi(state, action){
+            fetchStopsForTaxi(state, action) {
                 state.stopsForTaxi = action.payload;
             },
-            fetchUnknownStops(state, action){
+            fetchUnknownStops(state, action) {
                 state.unknownStops = action.payload;
             },
             deleteStopRequest(state) {
@@ -93,29 +95,29 @@ const stopSlice = createSlice({
             deleteStopFailure(state, action) {
                 state.deleteLoading = false;
             },
-            editStopRequest(state){
+            editStopRequest(state) {
                 state.addLoading = true;
             },
-            editStopSuccess(state){
+            editStopSuccess(state) {
                 state.addLoading = false;
                 state.singleStop = null;
             },
-            editStopFailure(state){
+            editStopFailure(state) {
                 state.addLoading = false;
             },
-            showEditOpen(state){
+            showEditOpen(state) {
                 state.editOpen = true;
             },
-            hideEditOpen(state){
+            hideEditOpen(state) {
                 state.editOpen = false;
             },
-            getStopIdToEdit(state, action){
+            getStopIdToEdit(state, action) {
                 state.editStopId = action.payload;
             },
-            changeTransportType(state, action){
+            changeTransportType(state, action) {
                 state.transportTypes = action.payload
             },
-            showOverlay(state){
+            showOverlay(state) {
                 state.showOverlay = !state.showOverlay;
             },
             deleteSelectedStopRequest(state) {
@@ -130,6 +132,15 @@ const stopSlice = createSlice({
             },
             deleteSelectedStopFailure(state, action) {
                 state.deleteLoading = false;
+            },
+            fetchStopInRoutesRequest() {
+
+            },
+            fetchStopInRoutesSuccess(state, action) {
+                state.stopInRoutes = action.payload
+                if(action.payload){
+                    state.routesCountInStop = Object.keys(state.stopInRoutes).length
+                }
             },
 
         }

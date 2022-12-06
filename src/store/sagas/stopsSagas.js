@@ -13,7 +13,7 @@ import {
     fetchAllStopsCountRequest,
     fetchAllStopsCountSuccess,
     fetchSingleStopRequest,
-    fetchSingleStopSuccess,
+    fetchSingleStopSuccess, fetchStopInRoutesRequest, fetchStopInRoutesSuccess,
     fetchStopsFailure,
     fetchStopsForBus,
     fetchStopsForBusRequest,
@@ -113,6 +113,18 @@ export function* fetchUnknownStopsSaga({payload}) {
     }
 }
 
+export function* fetchRoutesForStopSaga({payload:id}) {
+    console.log(id)
+    try{
+        const response = yield axiosApi.get('/route/via/' + id+'/');
+        console.log(response.data)
+        yield put(fetchStopInRoutesSuccess(response.data));
+
+    } catch (e) {
+        toast.error('Не удалось загрузить');
+    }
+}
+
 
 export function* AddStopsSagas({payload}) {
     console.log(payload)
@@ -127,7 +139,7 @@ export function* AddStopsSagas({payload}) {
 }
 
 
-function* deleteStopSaga({payload:id}) {
+export  function* deleteStopSaga({payload:id}) {
 
     try {
         yield axiosApi.delete(`/stop/${id}`);
@@ -154,7 +166,7 @@ function* deleteSelectedStopSaga({payload:id}) {
 
 
 
-function* editStopSaga({payload}) {
+export function* editStopSaga({payload}) {
     console.log(payload)
     try {
         yield axiosApi.put(`/stop/${payload.id}`, payload.obj);
@@ -166,6 +178,10 @@ function* editStopSaga({payload}) {
         yield put(editStopFailure());
     }
 }
+
+
+
+
 
 
 
@@ -181,6 +197,7 @@ const stopsSaga = [
     takeEvery(deleteStopRequest, deleteStopSaga),
     takeEvery(editStopRequest, editStopSaga),
     takeEvery(deleteSelectedStopRequest, deleteSelectedStopSaga),
+    takeEvery(fetchStopInRoutesRequest, fetchRoutesForStopSaga),
 ];
 
 export default stopsSaga;

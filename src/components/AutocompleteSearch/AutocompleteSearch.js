@@ -10,16 +10,17 @@ import ListIcon from '@mui/icons-material/List';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import {nanoid} from "nanoid";
 import {useDispatch, useSelector} from "react-redux";
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import {
     deleteSelectedStopRequest,
     deleteStopRequest,
-    fetchSingleStopRequest,
+    fetchSingleStopRequest, fetchStopInRoutesRequest,
     getStopIdToEdit,
     showEditOpen, showOverlay
 } from "../../store/actions/stopsActions";
 import {blue, green, yellow} from "../../colors";
 import AppWindow from "../UI/AppWindow/AppWindow";
-
+import ModalComponent from "../UI/ModalComponent/ModalComponent";
 
 
 const useStyles = makeStyles(theme => ({
@@ -30,7 +31,7 @@ const useStyles = makeStyles(theme => ({
         width: "98%",
         position: "relative",
         overflow: "visible",
-        cursor:'pointer'
+        cursor: 'pointer'
     },
 
     popoverBox: {
@@ -53,6 +54,7 @@ const AutocompleteSearch = () => {
     const classes = useStyles();
     const stops = useSelector(state => state.stops.stops);
     const typeOfTransport = useSelector(state => state.stops.transportTypes)
+    const routesCount = useSelector(state => state.stops.routesCountInStop);
     const [showBtn, setShowBtn] = useState(null);
 
     const [open, setOpen] = useState(false);
@@ -62,9 +64,12 @@ const AutocompleteSearch = () => {
 
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [isCheck, setIsCheck] = useState([]);
-const[openSelectedDelete, setOpenSelectedDelete] = useState(false);
+    const [openSelectedDelete, setOpenSelectedDelete] = useState(false);
 
-    const onClose = ()=>{
+    const [showRoutesInStop, setShowRoutesInStop] = useState(false)
+
+
+    const onClose = () => {
         setOpen(false);
         setDeleteElement(prevState => {
             prevState = '';
@@ -73,18 +78,19 @@ const[openSelectedDelete, setOpenSelectedDelete] = useState(false);
     }
 
 
-    const onStopClick =(e,id)=>{
-        if(showCheckbox === true){
+    const onStopClick = (e, id) => {
+        if (showCheckbox === true) {
             e.stopPropagation();
-        }else {
+        } else {
             dispatch(fetchSingleStopRequest(id))
-            if(parseInt(e.currentTarget.id) === id){
+            dispatch(fetchStopInRoutesRequest(id))
+            if (parseInt(e.currentTarget.id) === id) {
                 setShowBtn(id)
             }
         }
     }
 
-    const onDelete = (id)=>{
+    const onDelete = (id) => {
         dispatch(deleteStopRequest(id))
         setOpen(false);
         setDeleteElement(prevState => {
@@ -93,7 +99,7 @@ const[openSelectedDelete, setOpenSelectedDelete] = useState(false);
         });
     }
 
-    const deleteSelected = ()=>{
+    const deleteSelected = () => {
         dispatch(deleteSelectedStopRequest(isCheck));
         setOpenSelectedDelete(false);
         setIsCheck([])
@@ -101,7 +107,7 @@ const[openSelectedDelete, setOpenSelectedDelete] = useState(false);
     }
 
 
-    const deleteSelectedClose = ()=>{
+    const deleteSelectedClose = () => {
         setOpenSelectedDelete(false);
         setIsCheck([])
 
@@ -118,7 +124,7 @@ const[openSelectedDelete, setOpenSelectedDelete] = useState(false);
     };
 
     const handleClick = e => {
-        const { id, checked } = e.target;
+        const {id, checked} = e.target;
         setIsCheck([...isCheck, parseInt(id)]);
         if (checked === false) {
             setIsCheck(isCheck.filter(item => item !== parseInt(id)));
@@ -126,30 +132,30 @@ const[openSelectedDelete, setOpenSelectedDelete] = useState(false);
     };
 
 
-
     return (
         <>
             <Grid container justifyContent={"space-between"}>
                 <Grid item>
-                    <Typography variant={"subtitle1"} sx={{color: "#166767", fontWeight:"bold"}} >{typeOfTransport}</Typography>
+                    <Typography variant={"subtitle1"}
+                                sx={{color: "#166767", fontWeight: "bold"}}>{typeOfTransport}</Typography>
                 </Grid>
                 <Grid item>
 
                     <Tooltip title="Импортировать остановки из файла" arrow>
-                    <IconButton
-                    >
-                        <DriveFolderUploadIcon/>
-                    </IconButton>
+                        <IconButton
+                        >
+                            <DriveFolderUploadIcon/>
+                        </IconButton>
                     </Tooltip>
                     <Tooltip title="Выбрать элементы">
-                    <IconButton
-                      onClick={()=>{
-                          setShowCheckbox(!showCheckbox)
-                          dispatch(showOverlay())
-                      }}
-                    >
-                        <ListIcon/>
-                    </IconButton>
+                        <IconButton
+                            onClick={() => {
+                                setShowCheckbox(!showCheckbox)
+                                dispatch(showOverlay())
+                            }}
+                        >
+                            <ListIcon/>
+                        </IconButton>
                     </Tooltip>
                 </Grid>
 
@@ -167,11 +173,11 @@ const[openSelectedDelete, setOpenSelectedDelete] = useState(false);
                         />
                     </FormGroup>
                     <IconButton aria-label="delete"
-                                onClick={()=> {
+                                onClick={() => {
                                     setOpenSelectedDelete(true)
                                 }}>
 
-                        <DeleteIcon sx={{fontSize:"25px"}}/>
+                        <DeleteIcon sx={{fontSize: "25px"}}/>
                     </IconButton>
                 </Grid>
             )}
@@ -192,8 +198,8 @@ const[openSelectedDelete, setOpenSelectedDelete] = useState(false);
                             <>
                                 <div
                                     className={classes.autocomplete}
-                                   onClick={(e)=>onStopClick(e,option.id)}
-                                     key={nanoid()}
+                                    onClick={(e) => onStopClick(e, option.id)}
+                                    key={nanoid()}
                                     id={option.id}
                                 >
                                     {showCheckbox && (
@@ -202,10 +208,10 @@ const[openSelectedDelete, setOpenSelectedDelete] = useState(false);
                                         <div
                                             id={option.id}
                                             style={{
-                                            position: "absolute",
-                                            top: "0", right: "0",
-                                            zIndex:"123",
-                                        }}>
+                                                position: "absolute",
+                                                top: "0", right: "0",
+                                                zIndex: "123",
+                                            }}>
                                             {/*<Checkbox*/}
                                             {/*    key={option.id}*/}
                                             {/*    type="checkbox"*/}
@@ -228,34 +234,48 @@ const[openSelectedDelete, setOpenSelectedDelete] = useState(false);
                                         <DirectionsBusIcon
                                             sx={{
                                                 color: option.tp === 2 && blue ||
-                                                    option.tp===3 && yellow ||
-                                                    option.tp===0 && blue ||
+                                                    option.tp === 3 && yellow ||
+                                                    option.tp === 0 && blue ||
                                                     green,
                                                 fontSize: "12px",
                                             }}/>
                                     </div>
 
-                                    {option.id === showBtn  && !showCheckbox && (
+                                    {option.id === showBtn && !showCheckbox && (
                                         <div style={{position: "absolute", bottom: "0", right: "0"}}>
-                                        <IconButton aria-label="edit"
-                                        onClick={()=>{
-                                            dispatch(getStopIdToEdit(showBtn));
-                                            dispatch(showEditOpen())
-                                        }}
-                                        >
-                                            <ModeEditIcon sx={style}/>
-                                        </IconButton>
-                                        <IconButton aria-label="delete"
-                                                    onClick={()=> {
-                                                        setOpen(true)
-                                                        setDeleteElement(prevState => {
-                                                            prevState = option.id;
-                                                            return prevState
-                                                        });
-                                                    }}>
-                                            <DeleteIcon sx={style}/>
-                                        </IconButton>
-                                    </div>
+                                            <IconButton aria-label="edit"
+                                                        onClick={() => {
+                                                            dispatch(getStopIdToEdit(showBtn));
+                                                            dispatch(showEditOpen())
+                                                        }}
+                                            >
+                                                <ModeEditIcon sx={style}/>
+                                            </IconButton>
+                                            <IconButton aria-label="delete"
+                                                        onClick={() => {
+                                                            setOpen(true)
+                                                            setDeleteElement(prevState => {
+                                                                prevState = option.id;
+                                                                return prevState
+                                                            });
+                                                        }}>
+                                                <DeleteIcon sx={style}/>
+                                            </IconButton>
+
+                                        </div>
+                                    )}
+
+                                    {option.id === showBtn && !showCheckbox && (
+                                        <div style={{position: "absolute", top: "0", right: "0"}}>
+                                            <Tooltip title={"Эта остановка задействованна в "+routesCount+" маршрутах"} arrow>
+                                            <IconButton aria-label="delete"
+                                                        onClick={()=>setShowRoutesInStop(!showRoutesInStop)}
+                                            >
+                                                <AccountTreeIcon sx={style}/>
+                                                <b style={{fontSize:"14px", paddingLeft:'3px'}}>{routesCount}</b>
+                                            </IconButton>
+                                            </Tooltip>
+                                        </div>
                                     )}
 
                                 </div>
@@ -267,11 +287,15 @@ const[openSelectedDelete, setOpenSelectedDelete] = useState(false);
                 />
             )}
             {open && (
-                <AppWindow open={open} onClose={onClose} confirm={()=>onDelete(deleteElement)}/>
+                <AppWindow open={open} onClose={onClose} confirm={() => onDelete(deleteElement)}/>
             )}
 
             {openSelectedDelete && (
                 <AppWindow open={openSelectedDelete} onClose={deleteSelectedClose} confirm={deleteSelected}/>
+            )}
+
+            {showRoutesInStop && (
+                <ModalComponent open={showRoutesInStop} onClose={()=>setShowRoutesInStop(false)}/>
             )}
         </>
 

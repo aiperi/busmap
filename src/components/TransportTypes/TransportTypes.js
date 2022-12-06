@@ -51,10 +51,7 @@ const TransportTypes = () => {
     const stopsForTaxi = useSelector(state => state.stops.stopsForTaxi)
     const unknownStops = useSelector(state => state.stops.unknownStops)
 
-    const [searchParams, setSearchParams] = useSearchParams();
-    console.log(searchParams)
     // console.log(stopsForBus?.length)
-
 
     useEffect(() => {
         dispatch(fetchAllStopsCountRequest(`?cnt_tp=-1`))

@@ -147,7 +147,7 @@ const TrackingStops = () => {
                             </div>
                             <div className={classes.number}>{i + 1}</div>
 
-                            {i===6 && (
+                            {i===22 && (
                                 <>
                                     <div className={classes.iconWrapper}><LocalTaxiIcon className={classes.taxiIcon}/></div>
                                     <div className={`
