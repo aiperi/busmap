@@ -18,7 +18,7 @@ const style = {
 
 const ModalComponent = ({open, onClose}) => {
     const routes = useSelector(state => state.stops.stopInRoutes);
-    const  count = useSelector(state => state.stops.routesCountInStop);
+    const count = useSelector(state => state.stops.routesCountInStop);
     console.log(routes);
     return (
         <Modal
@@ -34,49 +34,42 @@ const ModalComponent = ({open, onClose}) => {
         >
             <Fade in={open}>
                 <Card sx={style} variant="outlined">
-                    <CardContent>
-                        <Typography variant="overline" textAlign="center" sx={{marginBottom:"20px"}} >
-                            Эта остановка задействованна в маршрутах: {count}
-                        </Typography>
-                        <div className={"route-box"}>
 
-                        {routes && Object.keys(routes).map(obj=>(
-                            <div className={"routes"}>
-                                <div className="routesNum" >
-                                  <Typography variant={"button"}>{routes[obj].n}</Typography>
-                                </div>
-                                <div style={{overflow:"hidden", whiteSpace:"nowrap", marginLeft:"10px"}}>
-                                    {routes[obj].plan.map(stop =>(
-                                        <Typography variant={"caption"} sx={{fontSize:"15px"}}>{stop}</Typography>
-                                    ))}
-                                </div>
 
+                    {count && count > 0 ? (
+                        <CardContent>
+                            <Typography variant="overline" textAlign="center" sx={{marginBottom: "20px"}}>
+                                Эта остановка задействованна в маршрутах: {count}
+                            </Typography>
+                            <div className={"route-box"}>
+
+                                {routes && Object.keys(routes).map(obj => (
+                                    <div className={"routes"}>
+                                        <div className="routesNum">
+                                            <Typography variant={"button"}>{routes[obj].n}</Typography>
+                                        </div>
+                                        <div style={{overflow: "hidden", whiteSpace: "nowrap", marginLeft: "10px"}}>
+                                            {routes[obj].plan.map(stop => (
+                                                <Typography variant={"caption"}
+                                                            sx={{fontSize: "15px"}}>{stop}</Typography>
+                                            ))}
+                                        </div>
+
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                        </div>
+                        </CardContent>
+                    ) : (
 
-                    </CardContent>
-                    <Grid container justifyContent="space-evenly" alignItems="center">
+                        <CardContent>
+                            <Typography variant="overline" textAlign="center" sx={{marginBottom: "20px"}}>
+                                Эта остановка не задействованна в доступных маршрутах
+                            </Typography>
 
-                        {/*<Grid item>*/}
-                        {/*    <Button*/}
-                        {/*        color="primary"*/}
-                        {/*        onClick={confirm}*/}
-                        {/*        variant="outlined"*/}
-                        {/*    >*/}
-                        {/*        Да*/}
-                        {/*    </Button>*/}
-                        {/*</Grid>*/}
-                        {/*<Grid item>*/}
-                        {/*    <Button*/}
-                        {/*        color="secondary"*/}
-                        {/*        onClick={onClose}*/}
-                        {/*        variant="outlined"*/}
-                        {/*    >*/}
-                        {/*        Нет*/}
-                        {/*    </Button>*/}
-                        {/*</Grid>*/}
-                    </Grid>
+                        </CardContent>
+                    )}
+
+
                 </Card>
             </Fade>
         </Modal>
