@@ -38,7 +38,6 @@
     "react-use-cookie": "^1.4.0",
     "redux": "^4.2.0",
     "redux-saga": "^1.2.1",
-    "rsuite": "^5.23.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
