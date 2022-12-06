@@ -1,9 +1,9 @@
 import React from 'react';
-import {Backdrop, Button, Card, CardContent, Fade, Modal} from "@mui/material";
+import {Backdrop, Card, CardContent, Fade, Modal} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import {useSelector} from "react-redux";
-import {blue, green} from "../../../colors";
+import "./style.css"
 
 const style = {
     position: 'absolute',
@@ -13,6 +13,7 @@ const style = {
     width: {xs: 250, md: 700},
     backgroundColor: 'background.paper',
     p: 2,
+
 }
 
 const ModalComponent = ({open, onClose}) => {
@@ -37,10 +38,11 @@ const ModalComponent = ({open, onClose}) => {
                         <Typography variant="overline" textAlign="center" sx={{marginBottom:"20px"}} >
                             Эта остановка задействованна в маршрутах: {count}
                         </Typography>
+                        <div className={"route-box"}>
 
                         {routes && Object.keys(routes).map(obj=>(
-                            <div style={{border:"1px solid lightgrey", padding:"10px", display:"flex", alignItems:"center"}}>
-                                <div style={{border:"1px solid "+green, padding:"10px", borderRadius:"50%"}}>
+                            <div className={"routes"}>
+                                <div className="routesNum" >
                                   <Typography variant={"button"}>{routes[obj].n}</Typography>
                                 </div>
                                 <div style={{overflow:"hidden", whiteSpace:"nowrap", marginLeft:"10px"}}>
@@ -51,6 +53,7 @@ const ModalComponent = ({open, onClose}) => {
 
                             </div>
                         ))}
+                        </div>
 
                     </CardContent>
                     <Grid container justifyContent="space-evenly" alignItems="center">

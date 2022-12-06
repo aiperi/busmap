@@ -1,0 +1,21 @@
+.route-box {
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.routes {
+    border: 1px solid lightgrey;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.routesNum {
+    border: 1px solid #32A754FF;
+    padding: 2px 5px;
+}
+
+.routes:hover {
+    background-color: #d0dede;
+}
