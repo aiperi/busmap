@@ -11,15 +11,11 @@ import {useNavigate} from "react-router-dom";
 import {busStops, rides, routes, tracking} from "../../paths";
 import {buildStyles, CircularProgressbar} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import {
-    fetchStopsForBusRequest,
-    fetchStopsForTaxiRequest,
-    fetchStopsForTrolleybusRequest, fetchUnknownStopsRequest
-} from "../../store/actions/stopsActions";
+import {fetchStopsRequest} from "../../store/actions/stopsActions";
 import {useDispatch} from "react-redux";
 
 
-const useStyles = makeStyles(()=> ({
+const useStyles = makeStyles(theme => ({
     box: {
         width: "25%",
         border: "1px solid lightgrey",
@@ -75,19 +71,10 @@ const useStyles = makeStyles(()=> ({
 
 const Dashboard = () => {
     const classes = useStyles();
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const date = new Date();
     const currentDate = moment(date).format('DD-MM-YYYY');
     const hour = date.getHours() + ":" + date.getMinutes();
-
-
-    useEffect(()=>{
-        dispatch(fetchStopsForBusRequest(`?cnt_tp=1`))
-        dispatch(fetchStopsForTrolleybusRequest(`?cnt_tp=2`))
-        dispatch(fetchStopsForTaxiRequest(`?cnt_tp=3`))
-        dispatch(fetchUnknownStopsRequest(`?cnt_tp=0`))
-    },[])
 
 
 

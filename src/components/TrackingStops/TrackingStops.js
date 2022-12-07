@@ -6,9 +6,8 @@ import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import {yellow} from "../../colors";
 import {makeStyles} from "@mui/styles";
 import lineImg from '../../assets/images/line.png'
-import LocalTaxiIcon from '@mui/icons-material/LocalTaxi';
 
-const useStyle = makeStyles(()=> ({
+const useStyle = makeStyles(theme => ({
     stopItem: {
         display: "inline-block",
         height: "71px",
@@ -55,49 +54,9 @@ const useStyle = makeStyles(()=> ({
         width: "20px",
     },
 
-    invisible: {
-        display: "none",
-    },
-
-    iconWrapper: {
-        position: "absolute",
-        top: "10px",
-        left: "48px",
-    },
-
-    taxiIcon: {
-        fontSize: "18px",
-        color: "grey"
-    },
-
-    dash: {
-        backgroundColor: "grey",
-        height: "2px",
-        position: "absolute",
-        right: "5px",
-        top: "40px",
-        width: "11px",
-    },
-
-    statusLabel: {
-        borderRadius: "4px",
-        color: "#ffffff",
-        fontSize: "11px",
-        lineHeight: "8px",
-        padding: "1px 3px 2px",
-        whiteSpace: "nowrap",
-        position: "absolute",
-        textAlign: "center",
-        top: "51px",
-        width: "45px",
-        zIndex: 1,
-        left:"35px"
-    },
-
-    slow:{
-        backgroundColor: "#ff5f5f"
-    },
-    value: {}
+    invisible:{
+        display:"none",
+    }
 
 }))
 
@@ -108,13 +67,7 @@ const TrackingStops = () => {
     return (
         <Grid container sx={{backgroundColor: "#e9ecef"}}>
             <TrackingContainer>
-                <Box sx={{
-                    padding: '10px',
-                    display: "flex",
-                    alignItems: "center",
-                    borderBottom: "1px solid lightgrey",
-                    marginBottom: "20px"
-                }}>
+                <Box sx={{padding: '10px', display: "flex", alignItems: "center", borderBottom: "1px solid lightgrey", marginBottom:"20px"}}>
                     <DirectionsBusIcon
                         sx={{
                             color: yellow,
@@ -128,63 +81,31 @@ const TrackingStops = () => {
                         ул. Абакир уулу Торобек — ул. Абакир уулу Торобек
                     </Typography>
                 </Box>
-                <Grid container sx={{padding: '10px'}}>
-                    {Array.from(Array(stopsNumber)).map((elementInArray, i) => (
+                <Grid container sx={{padding:'10px'}}>
+                    { Array.from(Array(stopsNumber)).map((elementInArray, i) => (
                         <div className={classes.stopItem} key={i}>
                             <div className={classes.circle}>
                             </div>
                             <div className={`
                                 ${classes.line} 
                                 ${classes.left} 
-                                ${i === 0 && classes.invisible} 
+                                ${i===0 &&  classes.invisible} 
                                 `}>
                             </div>
                             <div className={`
                             ${classes.line} 
                             ${classes.right} 
-                            ${i === stopsNumber - 1 && classes.invisible} 
+                            ${i===stopsNumber-1 && classes.invisible} 
                             `}>
                             </div>
-                            <div className={classes.number}>{i + 1}</div>
-
-                            {i===22 && (
-                                <>
-                                    <div className={classes.iconWrapper}><LocalTaxiIcon className={classes.taxiIcon}/></div>
-                                    <div className={`
-                            ${classes.dash}
-                          `}></div>
-                                    <div className={`${classes.statusLabel} ${classes.slow}`}>
-                                        <span className={classes.value}>-10min</span>
-                                    </div>
-                                </>
-                            )}
-
-
-                            {i===16 && (
-                                <>
-                                    <div className={classes.iconWrapper}><LocalTaxiIcon className={classes.taxiIcon}/></div>
-                                    <div className={`
-                            ${classes.dash}
-                          `}></div>
-                                    <div className={`${classes.statusLabel} ${classes.slow}`}>
-                                        <span className={classes.value}>-10min</span>
-                                    </div>
-                                </>
-                            )}
-
+                            <div className={classes.number}>{i+1}</div>
                         </div>
                     ))}
 
                 </Grid>
             </TrackingContainer>
             <TrackingContainer>
-                <Box sx={{
-                    padding: '10px',
-                    display: "flex",
-                    alignItems: "center",
-                    borderBottom: "1px solid lightgrey",
-                    marginBottom: "20px"
-                }}>
+                <Box sx={{padding: '10px', display: "flex", alignItems: "center", borderBottom: "1px solid lightgrey", marginBottom:"20px"}}>
                     <DirectionsBusIcon
                         sx={{
                             color: yellow,
@@ -198,24 +119,24 @@ const TrackingStops = () => {
                         ул. Иса Ахунбаева — ул. Иса Ахунбаева
                     </Typography>
                 </Box>
-                <Grid container sx={{padding: '10px'}}>
-                    {Array.from(Array(stopsNumber2)).map((elementInArray, i) => (
+                <Grid container sx={{padding:'10px'}}>
+                    { Array.from(Array(stopsNumber2)).map((elementInArray, i) => (
                         <div className={classes.stopItem} key={i}>
                             <div className={classes.circle}>
                             </div>
                             <div className={`
                                 ${classes.line} 
                                 ${classes.left} 
-                                ${i === 0 && classes.invisible} 
+                                ${i===0 &&  classes.invisible} 
                                 `}>
                             </div>
                             <div className={`
                             ${classes.line} 
                             ${classes.right} 
-                            ${i === stopsNumber2 - 1 && classes.invisible} 
+                            ${i===stopsNumber2-1 && classes.invisible} 
                             `}>
                             </div>
-                            <div className={classes.number}>{i + 1}</div>
+                            <div className={classes.number}>{i+1}</div>
                         </div>
                     ))}
 
