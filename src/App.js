@@ -10,11 +10,12 @@ import Dashboard from "./containers/DashBoard/Dashboard";
 import Tracking from "./containers/Tracking/Tracking";
 import Reports from "./containers/Reports/Reports";
 import Rides from "./containers/Rides/Rides";
+import SingleRoute from "./containers/SIngleRoute/SingleRoute";
 import SingleRide from "./containers/SingleRide/SingleRide";
 import Preloader from "./components/UI/Preloader/Preloader";
+import DirectionAnimation from "./containers/DIrectionAnimation/DirectionAnimation";
 import AddBusStop from "./components/AddBusStop/AddBusStop";
 import ApiKey from "./containers/ApiKey/ApiKey";
-import SingleRoute from "./containers/SIngleRoute/SingleRoute";
 
 
 function App() {
@@ -30,10 +31,10 @@ function App() {
           <Route path={reports} element={<Reports/>}/>
           <Route path={apiKey} element={<ApiKey/>}/>
           <Route path={rides} element={<Rides/>}/>
-          {/*<Route path={singleRoute} element={<SingleRoute/>}/>*/}
-          <Route path="/routes/:id" element={<SingleRoute/>}/>
+          <Route path={singleRoute} element={<SingleRoute/>}/>
           <Route path={singleRide} element={<SingleRide/>}/>
           <Route path="/loader" element={<Preloader/>}/>
+          <Route path="/testAnimation" element={<DirectionAnimation/>}/>
           <Route path="/addstop" element={<AddBusStop/>}/>
       </Routes>
       </Layout>

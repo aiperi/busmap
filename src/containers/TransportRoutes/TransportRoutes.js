@@ -1,26 +1,23 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Grid} from "@mui/material";
 import TransportTypes from "../../components/TransportTypes/TransportTypes";
 import AutocompleteRoutes from "../../components/AutocompleteRoutes/AutocompleteRoutes";
-import {useDispatch} from "react-redux";
 
 const TransportRoutes = () => {
-    const dispatch = useDispatch()
-    // const streets = useSelector((state) => state.stops.stops);
-    // console.log(streets)
-
-    // useEffect(() => {
-    //     dispatch()
-    // }, []);
-
     return (
+        // <Grid container sx={{justifyContent: "space-between"}}>
         <Grid container flexDirection={"column"}>
+           {/*<Grid item flexGrow={1}>*/}
+           {/*    <TransportTypes/>*/}
+           {/*</Grid>*/}
             <Grid item >
                 <TransportTypes/>
             </Grid>
             <Grid item >
                 <AutocompleteRoutes/>
             </Grid>
+
+
         </Grid>
     );
 };

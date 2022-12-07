@@ -1,68 +1,102 @@
-import React, {useEffect, useState} from 'react';
-import {Grid, IconButton, TextField, Typography} from "@mui/material";
+import React from 'react';
+import {Checkbox, Grid, IconButton, TextField, Typography} from "@mui/material";
 import {TabsButton} from "../../../assets/styles/tabs/tabs";
 import SearchIcon from '@mui/icons-material/Search';
-import Checkbox from "./checkbox";
-import {useStyles} from "./style";
-import {Object} from "./object";
-import {Group} from "./groups";
-import Tabs from "@mui/material/Tabs"
-import Box from "@mui/material/Box";
+import {makeStyles} from "@mui/styles";
 
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+const useStyles = makeStyles(theme => ({
+    input: {
+        height: "40px",
+    },
+    listBox:{
+        display:"grid",
+        gridTemplateRows: "36px auto",
+        fontSize:"15px"
+    },
+    horizontalList: {
+        alignContent: "flex-start",
+        display: "flex",
+        flexDirection: "column",
+        flexWrap: "wrap",
+        overflowX: "auto",
+        padding: "10px 20px 5px 20px",
+        height: "60vh",
 
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box sx={{ pt:1 }}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
-    );
-}
+    },
+    row: {
+        alignItems: "center",
+        display: "flex",
+        height: "32px",
+        padding: "5px 20px 5px 0",
+        width: "270px",
+    }
+}));
+
 
 const ObjectsTab = () => {
     const classes = useStyles();
-    const [value, setValue] = React.useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
+    const label = {inputProps: {'aria-label': 'Checkbox demo'}};
+    const objectNumbers = [
+        '01KG032AFC', '01KG682LHT', '01KG987FFC',
+        '01KG032AFC', '01KG682LHT', '01KG987FFC',
+        "01KG032AFC", '01KG987FFC', '01KG682LHT',
+        "01KG032AFC", '01KG987FFC', '01KG682LHT',
+        "01KG032AFC", '01KG987FFC', '01KG682LHT',
+        "01KG032AFC", '01KG987FFC', '01KG682LHT',
+        "01KG032AFC", '01KG987FFC', '01KG682LHT',
+        "01KG032AFC", '01KG987FFC', '01KG682LHT',
+        "01KG032AFC", '01KG987FFC', '01KG682LHT',
+        "01KG032AFC", '01KG987FFC', '01KG682LHT',
+        "01KG032AFC", '01KG987FFC', '01KG682LHT',
+        "01KG032AFC", '01KG987FFC', '01KG682LHT',
+        "01KG032AFC", '01KG987FFC', '01KG682LHT',
+    ]
 
     return (
-        <Grid container >
-
-            <div style={{width: "31%", display: 'flex', alignItems: "center", justifyContent: "space-between"}}>
-                <Typography variant={'subtitle2'}>
-                    <b>Привязка объектов к маршруту</b>
-                </Typography>
-            </div>
-            <div style={{width: "31%", color: "gray", display: "flex", alignItems: "center"}}>
-                <Checkbox/>
-                <Typography variant={"subtitle2"}>Автоматическое назначение объектов </Typography>
-            </div>
-            <div style={{width: "33%", display: 'flex', justifyContent: "right"}}>
-                <Tabs value={value} onChange={handleChange}>
-                    <TabsButton label="Обьекты"/>
-                    <TabsButton  label="Группы"/>
-                </Tabs>
-            </div>
-            <div style={{width:"1440px"}}>
-                <TabPanel value={value} index={0}>
-                    <Object/>
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                   <Group/>
-                </TabPanel>
+        <Grid>
+            <Grid container>
+                <div style={{width: "31%", display: 'flex', alignItems: "center", justifyContent: "space-between"}}>
+                    <Typography variant={'subtitle2'}>
+                        <b>Привязка объектов к маршруту</b>
+                    </Typography>
+                </div>
+                <div style={{width: "31%", color: "gray", display: "flex", alignItems: "center"}}>
+                    <Checkbox {...label} disabled checked/>
+                    <Typography variant={"subtitle2"}>Автоматическое назначение объектов </Typography>
+                </div>
+                <div style={{width: "33%", display: "flex", justifyContent: "right"}}>
+                    <TabsButton variant="outlined">Объекты</TabsButton>
+                    <TabsButton variant="outlined">Группы</TabsButton>
+                    <TextField
+                        id="standard-bare"
+                        variant="outlined"
+                        defaultValue="Поиск"
+                        InputProps={{
+                            endAdornment: (
+                                <IconButton>
+                                    <SearchIcon/>
+                                </IconButton>
+                            ),
+                            className: classes.input
+                        }}
+                        sx={{input: {color: 'darkgray'}}}
+                    />
+                </div>
+            </Grid>
+            <Grid item sx={{color: 'darkgray', padding: "10px", backgroundColor: "whitesmoke"}}>
+                <Typography variant={'subtitle1'} sx={{fontSize: "14px"}}>Найдено
+                    элементов: {objectNumbers.length + 1}</Typography>
+            </Grid>
+            <div className={classes.listBox}>
+                <div className={classes.horizontalList}>
+                    {objectNumbers.map(obj=>(
+                        <div className={classes.row}>
+                            <Checkbox {...label} disabled />
+                            <Typography variant={"subtitle2"}>{obj} </Typography>
+                        </div>
+                    ))}
+                </div>
             </div>
         </Grid>
     );
