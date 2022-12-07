@@ -12,12 +12,10 @@ const BusStops = () => {
         dispatch(fetchStopsRequest());
     },[])
 
-
     return (
         <div>
             <TransportTypes/>
             <BusStopsMap/>
-            {/*<MapOfStops/>*/}
         </div>
     );
 };

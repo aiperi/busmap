@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Grid, IconButton, Typography} from "@mui/material";
 import Box from "@mui/material/Box";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
 import {blue, yellow} from "../../colors";
 import {BusNumberWrapper} from "../../assets/styles/trackingWrapper/trackingWrapper";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {routes} from "../../paths";
 import Switch from "@mui/material/Switch";
 import Tab from '@mui/material/Tab';
@@ -17,6 +17,14 @@ import Badge from "@mui/material/Badge";
 import StopsTab from "../../components/RoutesTabPanels/StopsTab/StopsTab";
 import ScheduleTab from "../../components/RoutesTabPanels/ScheduleTab/ScheduleTab";
 import ObjectsTab from "../../components/RoutesTabPanels/ObjectsTab/ObjectsTab";
+import {useDispatch, useSelector} from "react-redux";
+import {ColorButton} from "../../components/RoutesTabPanels/StopsTab/style";
+import {
+    fetchRoutesGroupsRequest,
+    fetchRoutesUnitsRequest,
+    fetchSingleRoutesRequest
+} from "../../store/actions/routesActions";
+import {assignUnitsToRoute, assignUnitsToRouteSagas} from "../../store/sagas/routesSagas";
 
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -30,12 +38,47 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     },
 }));
 
-
 const SingleRoute = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch()
+    const {id} = useParams()
     const label = {inputProps: {'aria-label': 'Switch demo'}};
-
     const [value, setValue] = React.useState('1');
+    const [uCount, setUCount] = React.useState(0);
+    const assign = useSelector((state) => state.routes.assign)
+    const globalId = useSelector((state) => state.routes.globalID)
+    const single = useSelector((state) => state.routes.singleRoutes)
+    const unit = useSelector((state) => state.routes.assignUnits)
+    const group = useSelector((state) => state.routes.assignGroups)
+    const saveButton = useSelector((state) => state.routes.save)
+
+    console.log(assign)
+    useEffect(() => {
+        dispatch(fetchSingleRoutesRequest(id))
+    },[])
+
+    useEffect(() => {
+        let total = 0
+        if(assign.length > 1){
+            for(let i = 0; i<assign.length; i++){
+             total += assign[i] && assign[i].length
+            }
+        } else {
+           total = assign[globalId-1] && assign[globalId-1].length
+        }
+
+        setUCount(total)
+    }, [assign])
+
+
+    const SaveAssignUnitsToRoute = () => {
+        dispatch(assignUnitsToRoute({route:[id], unit:[...unit], group:[...group]}))
+    }
+
+    const onCancel = () => {
+
+    }
+
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -43,40 +86,50 @@ const SingleRoute = () => {
 
     return (
         <Grid sx={{backgroundColor: "whitesmoke"}} spacing={1}>
-            <Box sx={{
-                backgroundColor: "white",
-                padding: '10px',
-                display: "flex",
-                alignItems: "center",
-                borderBottom: "1px solid lightgrey",
-                marginBottom: "20px"
-            }}>
-                <IconButton variant="outlined" onClick={() => navigate(routes)}>
-                    <ArrowBackIcon/>
-                </IconButton>
-                <DirectionsBusIcon
-                    sx={{
-                        color: yellow,
-                        fontSize: "30px",
-                        width: '60px'
-                    }}/>
-                <BusNumberWrapper>
-                    <p>102</p>
-                </BusNumberWrapper>
-                <Typography variant={'h5'} sx={{paddingBottom: "5px"}}>
-                    ул. Абакир уулу Торобек — ул. Абакир уулу Торобек
-                </Typography>
-                <Switch {...label} defaultChecked sx={{marginLeft: "5%"}}/>
-            </Box>
+            {single && (
+                <Box sx={{
+                    backgroundColor: "white",
+                    padding: '10px',
+                    display: "flex",
+                    alignItems: "center",
+                    borderBottom: "1px solid lightgrey",
+                    marginBottom: "20px"
+                }}>
+                    <IconButton variant="outlined" onClick={() => navigate(routes)}>
+                        <ArrowBackIcon/>
+                    </IconButton>
+                    <DirectionsBusIcon
+                        sx={{
+                            color: yellow,
+                            fontSize: "30px",
+                            width: '60px'
+                        }}/>
+                    <BusNumberWrapper>
+                        <p>{single.n}</p>
+                    </BusNumberWrapper>
+                    <Typography variant={'h5'} sx={{paddingBottom: "5px"}}>
+                        {/*<p>{single.st[0].id.n} - {single.st[single.st.length - 1].id.n}</p>*/}
+                    </Typography>
+                    <Switch {...label} defaultChecked sx={{marginLeft: "5%"}} sx={{marginLeft: "300px"}}/>
+                    {/*{saveButton && (*/}
+                    <div style={{display: "flex "}}>
+                        <ColorButton style={{margin:"5px"}} variant={'contained'} onClick={onCancel}>
+                            Отменить
+                        </ColorButton>
+                        <ColorButton style={{margin:"5px"}} variant={'contained'} onClick={SaveAssignUnitsToRoute}>
+                            Сохранить
+                        </ColorButton>
+                    </div>
+                    {/*)}*/}
+                </Box>
+            )}
             <Grid item>
                 <Box sx={{width: '100%', typography: 'body1', backgroundColor:"white"}}>
-                    <TabContext value={value} >
+                    <TabContext value={value}>
                         <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                             <TabList
                                 onChange={handleChange}
                                 aria-label="table_report"
-                                // indicatorColor="red"
-                                // textColor={pr}
                                 TabIndicatorProps={{
                                     sx: {
                                         backgroundColor: blue,
@@ -95,7 +148,7 @@ const SingleRoute = () => {
                                 />
                                 <Tab
                                     sx={{paddingRight:"35px"}}
-                                    label={<StyledBadge badgeContent={8} color="primary">Объекты </StyledBadge>}
+                                    label={<StyledBadge badgeContent={uCount} color="primary">Объекты </StyledBadge>}
                                     value="3"
                                 />
                             </TabList>

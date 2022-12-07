@@ -1,5 +1,6 @@
 import {styled} from "@mui/material/styles";
 import {Box, Button} from '@mui/material'
+import Tab from "@mui/material/Tab";
 
 export const TabsContainer = styled(Box)(()=>({
     display: "flex",
@@ -11,7 +12,7 @@ export const TabsContainer = styled(Box)(()=>({
 }))
 
 
-export const TabsButton = styled(Button)(({ theme }) => ({
+export const TabsButton = styled(Tab)(({ theme }) => ({
     color: "gray",
     fontSize:"13px",
     height:"38px",

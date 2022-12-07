@@ -1,11 +1,12 @@
 import {combineReducers} from "redux";
 import createSagaMiddleware from 'redux-saga';
 import {rootSagas} from "./rootSagas";
-import {configureStore} from "@reduxjs/toolkit";
+import {configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
 import {loadFromLocalStorage} from "./localStorage";
 import usersSlice from "./slices/userSlice";
 import stopSlice from "./slices/stopSlice";
 import axiosApi from "../axiosApi";
+import routesSlice from "./slices/RoutesSlice";
 
 // const csrfToken = getCookie('csrftoken');
 
@@ -13,6 +14,7 @@ import axiosApi from "../axiosApi";
 const rootReducer = combineReducers({
     'users': usersSlice.reducer,
     'stops':stopSlice.reducer,
+    'routes': routesSlice.reducer,
 
 });
 
@@ -21,7 +23,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 const persistedState = loadFromLocalStorage();
 
-const middleware = [sagaMiddleware];
+const middleware = [ ...getDefaultMiddleware(), sagaMiddleware];
 
 const store = configureStore({
     reducer: rootReducer,

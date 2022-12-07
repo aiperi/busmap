@@ -5,8 +5,6 @@ import {put, takeEvery} from "redux-saga/effects";
 import {dashboard} from "../../paths";
 import History from '../../History';
 
-
-
 export function* loginUserSaga({payload:user}) {
     try {
         const response = yield axiosApi.post('/api/login/', user);
@@ -23,8 +21,6 @@ export function* loginUserSaga({payload:user}) {
     }
 
 }
-
-
 
 export function* logoutUserSaga() {
     try {
